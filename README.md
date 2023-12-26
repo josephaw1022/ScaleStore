@@ -25,7 +25,7 @@ graph TD
     F --> G
     G -->|Determines| H[Number of Instances]
     H -->|Informs| I[KEDA Scaled Object]
-    I -->|Attaches to| J[Deployment - Authorization Service]
+    I -->|Attaches to| J[Deployment - Your Microservice]
 ```
 
 ## Usage

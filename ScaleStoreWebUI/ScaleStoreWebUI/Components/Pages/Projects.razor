@@ -1,0 +1,52 @@
+﻿@page "/projects"
+
+<h3>Projects</h3>
+
+@if (projects == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Project ID</th>
+                <th>Project Name</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var project in projects)
+            {
+                <tr>
+                    <td>@project.ProjectID</td>
+                    <td>@project.ProjectName</td>
+                    <td>
+                        <button class="btn btn-primary" @onclick="() => EditProject(project.ProjectID)">Edit</button>
+                        <button class="btn btn-danger" @onclick="() => DeleteProject(project.ProjectID)">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<dynamic> projects;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // projects = await ProjectService.GetProjectsAsync();
+    }
+
+    private void EditProject(int projectId)
+    {
+        // Navigate to edit page
+    }
+
+    private void DeleteProject(int projectId)
+    {
+        // Confirm and delete project
+    }
+}

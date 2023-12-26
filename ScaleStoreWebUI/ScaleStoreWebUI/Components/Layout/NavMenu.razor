@@ -1,0 +1,39 @@
+﻿<div class="top-row ps-3 navbar navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="">
+            Scale Store Web UI
+        </a>
+    </div>
+</div>
+
+<input type="checkbox" title="Navigation menu" class="navbar-toggler" />
+
+<div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
+    <nav class="flex-column">
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                <span class="bi " aria-hidden="true"></span> Home
+            </NavLink>
+        </div>
+
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="project" Match="NavLinkMatch.All">
+                <span class="bi " aria-hidden="true"></span> Projects
+            </NavLink>
+        </div>
+
+       
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="weather">
+                <span class="bi " aria-hidden="true"></span> Environments
+            </NavLink>
+        </div>
+
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="weather">
+                <span class="bi" aria-hidden="true"></span> Applications
+            </NavLink>
+        </div>
+    </nav>
+</div>
+

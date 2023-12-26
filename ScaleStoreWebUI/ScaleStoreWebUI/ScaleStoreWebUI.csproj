@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+		<ContainerRegistry>localhost:5001</ContainerRegistry>
+		<ContainerRepository>scalestore-blazorui</ContainerRepository>
+		<ContainerBaseImage>mcr.microsoft.com/dotnet/aspnet:8.0</ContainerBaseImage>
+		<ContainerRuntimeIdentifier>linux-x64</ContainerRuntimeIdentifier>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\..\KEDAScalingUI.ServiceDefaults\KEDAScalingUI.ServiceDefaults.csproj" />
+		<ProjectReference Include="..\ScaleStoreWebUI.Client\ScaleStoreWebUI.Client.csproj" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.0" />
+	</ItemGroup>
+
+</Project>

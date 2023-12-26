@@ -16,7 +16,7 @@ Scale Store operates in conjunction with Kubernetes and KEDA. It is designed to 
 ```mermaid
 graph TD
     A[Kubernetes Cluster] -->|KEDA Installed| B(Scale Store)
-    B -->|Manages Scaling Configurations via UI| C{Scaler Objects}
+    B -->|Manages Scaling Configurations via UI| C{Scaler Schema}
     C --> D[Project]
     C --> E[Environment]
     C --> F[Application]

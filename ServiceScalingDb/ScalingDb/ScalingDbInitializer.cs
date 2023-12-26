@@ -3,7 +3,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
-using Microsoft.VisualBasic;
 
 
 namespace ServiceScalingDb.ScalingDb;

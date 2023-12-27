@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ScaleStoreHttpApi.Requests;
+using ServiceScalingDTO;
 
 namespace ScaleStoreHttpApi.Controllers
 {
@@ -62,9 +63,16 @@ namespace ScaleStoreHttpApi.Controllers
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
-        public async Task<IActionResult> Create([FromBody] CreateEnvironmentRequest request)
+        public async Task<IActionResult> Create([FromBody] CreateEnvironmentDTO requestBody)
         {
-            var response = await _mediator.Send(request);
+
+            var mediatrRequest = new CreateEnvironmentRequest
+            {
+                EnvironmentName = requestBody.EnvironmentName,
+                ProjectID = requestBody.ProjectID
+            };
+
+            var response = await _mediator.Send(mediatrRequest);
 
             return CreatedAtAction(nameof(GetOne), new { id = response.EnvironmentID }, response);
         }
@@ -74,9 +82,17 @@ namespace ScaleStoreHttpApi.Controllers
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> Update([FromBody] UpdateEnvironmentRequest request)
+        public async Task<IActionResult> Update([FromBody] UpdateEnvironmentDTO requestBody)
         {
-            var response = await _mediator.Send(request);
+
+            var request = new UpdateEnvironmentRequest
+            {
+                EnvironmentID = requestBody.EnvironmentID,
+                EnvironmentName = requestBody.EnvironmentName,
+                ProjectID = requestBody.ProjectID
+            };
+
+            var  response = await _mediator.Send(request);
 
             if (response is null)
             {

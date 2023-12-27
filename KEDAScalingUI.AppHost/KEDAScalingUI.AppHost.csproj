@@ -15,7 +15,7 @@
   <ItemGroup>
     <ProjectReference Include="..\ScaleStoreAuthenticationDb\ScaleStoreAuthenticationDb.csproj" />
     <ProjectReference Include="..\ScaleStoreAuthenticationWebApi\ScaleStoreAuthenticationWebApi.csproj" />
-    <ProjectReference Include="..\ScaleStoreHttpApi\ScaleStoreHttpApi.csproj" />
+    <ProjectReference Include="..\ScaleStoreHttpApi\ServiceScalingWebApi.csproj" />
     <ProjectReference Include="..\ScaleStoreWebUI\ScaleStoreWebUI\ScaleStoreWebUI.csproj" />
     <ProjectReference Include="..\ServiceScalingDb\ServiceScalingDb.csproj" />
   </ItemGroup>

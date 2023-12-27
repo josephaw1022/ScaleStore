@@ -1,7 +1,5 @@
 ﻿using MediatR;
 using ServiceScalingDb.ScalingDb;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace ScaleStoreHttpApi.Requests;
 public class CreateEnvironmentRequest : IRequest<CreateEnvironmentResponse>

@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using ServiceScalingDb.ScalingDb;
-using ScaleStoreHttpApi.DTO;
+using ServiceScalingDTO;
 using MediatR;
 using ScaleStoreHttpApi.Requests;
 

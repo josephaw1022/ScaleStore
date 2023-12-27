@@ -1,6 +1,5 @@
-﻿namespace ScaleStoreHttpApi.DTO
+﻿namespace ServiceScalingDTO
 {
-
     public class ProjectCreateDTO
     {
         public string Name { get; set; } = null!;

@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using ScaleStoreHttpApi.Requests;
+using ServiceScalingDTO;
 
 namespace ScaleStoreHttpApi.Controllers;
 
@@ -34,17 +35,37 @@ public class ScalingConfigurationController : ControllerBase
 
     // POST: scalingconfiguration
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] CreateScalingConfigurationRequest request)
+    public async Task<IActionResult> Create([FromBody] CreateScalingConfigurationDTO requestBody)
     {
+        var request = new CreateScalingConfigurationRequest
+        {
+            ApplicationID = requestBody.ApplicationID,
+            EnvironmentID = requestBody.EnvironmentID,
+            NumberOfInstances = requestBody.NumberOfInstances
+        };
+
+
         var response = await _mediator.Send(request);
         return CreatedAtAction(nameof(Get), new { id = response.ScalingID }, response);
     }
 
     // PUT: scalingconfiguration/5
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(int id, [FromBody] UpdateScalingConfigurationRequest request)
+    public async Task<IActionResult> Update(int id, [FromBody]  UpdateScalingConfigurationDTO requestBody)
     {
-        if (id != request.ScalingID) return BadRequest("ID mismatch");
+        if (id != requestBody.ScalingID)
+        {
+            return BadRequest("ID mismatch");
+        }
+
+
+        var request = new UpdateScalingConfigurationRequest
+        {
+            ScalingID = requestBody.ScalingID,
+            ApplicationID = requestBody.ApplicationID,
+            EnvironmentID = requestBody.EnvironmentID,
+            NumberOfInstances = requestBody.NumberOfInstances
+        };
 
         var response = await _mediator.Send(request);
         if (response == null) return NotFound();

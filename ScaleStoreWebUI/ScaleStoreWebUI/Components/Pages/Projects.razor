@@ -1,8 +1,11 @@
 ﻿@page "/projects"
+@inject ScaleStoreApiService httpService
+@inject ILogger<Projects> logger
+
 
 <h3>Projects</h3>
 
-@if (projects == null)
+@if (projects is null)
 {
     <p><em>Loading...</em></p>
 }
@@ -11,21 +14,18 @@ else
     <table class="table">
         <thead>
             <tr>
-                <th>Project ID</th>
                 <th>Project Name</th>
-                <th>Actions</th>
+                <th># of Environments</th>
+                <th># of Aplications</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var project in projects)
             {
                 <tr>
-                    <td>@project.ProjectID</td>
-                    <td>@project.ProjectName</td>
-                    <td>
-                        <button class="btn btn-primary" @onclick="() => EditProject(project.ProjectID)">Edit</button>
-                        <button class="btn btn-danger" @onclick="() => DeleteProject(project.ProjectID)">Delete</button>
-                    </td>
+                    <td>@project.name</td>
+                    <td>@project.numberOfEnvironments</td>
+                    <td>@project.numberOfApplications</td>
                 </tr>
             }
         </tbody>
@@ -33,11 +33,15 @@ else
 }
 
 @code {
-    private List<dynamic> projects;
+
+
+    private List<ProjectsListModel> projects = null;
 
     protected override async Task OnInitializedAsync()
     {
-        // projects = await ProjectService.GetProjectsAsync();
+        projects = await httpService.GetProjects();
+        logger.LogDebug("Projects: {0}", projects);
+
     }
 
     private void EditProject(int projectId)

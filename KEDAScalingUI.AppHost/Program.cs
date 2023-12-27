@@ -24,13 +24,14 @@ var scalingdbApp = builder.AddProject<Projects.ServiceScalingDb>("scalestore-dba
                     .WithReference(scalingDb);
 
 
-var scaleStoreHttpApi = builder.AddProject<Projects.ScaleStoreHttpApi>("scalestore-webapi")
+var scaleStoreHttpApi = builder.AddProject<Projects.ServiceScalingWebApi>("scalestore-webapi")
     .WithReference(scalingDb)
     .WithReference(authenticationHttpApi);
 
 
 // web ui
-var webUi = builder.AddProject<Projects.ScaleStoreWebUI>("scalestorewebui");
+var webUi = builder.AddProject<Projects.ScaleStoreWebUI>("scalestorewebui")
+    .WithReference(scaleStoreHttpApi);
 
 
 

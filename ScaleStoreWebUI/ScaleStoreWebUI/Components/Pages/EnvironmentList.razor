@@ -1,0 +1,61 @@
+﻿@page "/environments"
+@inject ScaleStoreApiService httpService
+@inject ILogger<Projects> logger
+
+
+<h3>Environments</h3>
+
+@if (environments is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Environment Name
+                </th>
+                <th>
+                    Project Name
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var environment in environments)
+            {
+                <tr>
+                    <td>@environment.environmentName</td>
+                    <td>
+                        @environment.projectName
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+
+
+    private List<EnvironmentListModel> environments = null;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        environments = await httpService.GetEnvironments(1);
+        logger.LogDebug("Environments: {0}", environments);
+
+    }
+
+    private void EditEnvironment(int environmentId)
+    {
+        // Navigate to edit page
+    }
+
+    private void DeleteEnvironment(int environmentId)
+    {
+        // Confirm and delete project
+    }
+}

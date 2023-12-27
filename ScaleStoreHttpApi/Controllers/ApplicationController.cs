@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MediatR;
 using ScaleStoreHttpApi.Requests;
-using ScaleStoreHttpApi.DTO;
+using ServiceScalingDTO;
 
 
 namespace ScaleStoreHttpApi.Controllers;

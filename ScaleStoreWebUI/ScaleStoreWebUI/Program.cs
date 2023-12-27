@@ -12,7 +12,10 @@ builder.Services.AddRazorComponents()
     .AddInteractiveWebAssemblyComponents();
 
 
-builder.Services.AddHttpClient<ScaleStoreApiService>(client => client.BaseAddress =  new("http://scalestore-webapi"));
+builder.Services.AddHttpClient<ScaleStoreApiService>(client => {
+    client.BaseAddress = new("http://scalestore-webapi");
+    }
+);
 
 var app = builder.Build();
 

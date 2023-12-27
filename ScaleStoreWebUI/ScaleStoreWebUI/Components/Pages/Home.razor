@@ -1,22 +1,36 @@
 ﻿@page "/"
-@rendermode InteractiveServer
-@inject ILogger<Home> Logger
 
+<PageTitle>Scale Store</PageTitle>
 
-@code {
+<div class="container mt-5">
+    <h1 class="display-4 text-center mb-4">Welcome to Scale Store</h1>
 
+    <div class="alert alert-info">
+        <p>
+            Scale Store simplifies the scaling management of your Kubernetes applications, offering an intuitive interface to control the number of instances for each service. Ideal for environments with predictable load patterns, Scale Store integrates seamlessly with Kubernetes and KEDA, providing a centralized, user-friendly platform for all your scaling needs.
+        </p>
+        <p>
+            Whether you're managing small government projects, internal tools, or sandbox development environments, Scale Store streamlines your workflow, allowing you to manage application scaling configurations without the need to directly edit Kubernetes YAML files.
+        </p>
+    </div>
 
+    <div class="my-4">
+        <h2 class="h3">Getting Started</h2>
+        <p>
+            To begin using Scale Store:
+        </p>
+        <ol class="list-group list-group-numbered">
+            <li class="list-group-item">Ensure that <strong>KEDA is installed</strong> on your Kubernetes cluster.</li>
+            <li class="list-group-item"><strong>Deploy Scale Store</strong> using our Helm chart for easy integration.</li>
+            <li class="list-group-item">Access the <strong>Scale Store UI</strong> to configure your projects, environments, and applications.</li>
+            <li class="list-group-item">Monitor and adjust scaling configurations as needed through our intuitive dashboard.</li>
+        </ol>
+    </div>
 
-}
-
-<PageTitle>Home</PageTitle>
-
-<h1>
-    Home
-</h1>
-
-
-
-<p>
-    This is 
-</p>
+    <div class="alert alert-warning">
+        <h3 class="h5">Please Note</h3>
+        <p>
+            Scale Store is currently in active development. While it's fully operational, some features are still being enhanced. We encourage you to provide feedback and contribute to the development of Scale Store. Your input is invaluable in helping us improve and evolve.
+        </p>
+    </div>
+</div>

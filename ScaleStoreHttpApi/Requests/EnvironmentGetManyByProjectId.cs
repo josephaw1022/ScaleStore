@@ -18,7 +18,7 @@
     {
         public int EnvironmentID { get; set; }
         public string EnvironmentName { get; set; } = null!;
-        public int ProjectID { get; set; }
+        public string ProjectName { get; set; } = null!;
     }
 
     public class GetManyEnvironmentsRequestHandler : IRequestHandler<GetManyEnvironmentsRequest, List<GetManyEnvironmentsResponse>>
@@ -32,16 +32,19 @@
 
         public async Task<List<GetManyEnvironmentsResponse>> Handle(GetManyEnvironmentsRequest request, CancellationToken cancellationToken)
         {
-            var environments = await dbContext.Environments.
-                Where(e => e.ProjectID == request.ProjectID).
-                ToListAsync(cancellationToken);
+            var environments = await dbContext.Environments
+              .Include(e => e.Project)
+              .Where(e => e.ProjectID == request.ProjectID)
+              .Select(e => new GetManyEnvironmentsResponse
+              {
+                  EnvironmentID = e.EnvironmentID,
+                  EnvironmentName = e.EnvironmentName,
+                  ProjectName = e.Project.ProjectName
+              }
+              )
+              .ToListAsync(cancellationToken);
 
-            return environments.Select(e => new GetManyEnvironmentsResponse
-            {
-                EnvironmentID = e.EnvironmentID,
-                EnvironmentName = e.EnvironmentName,
-                ProjectID = e.ProjectID
-            }).ToList();
+            return environments;
         }
     }
 

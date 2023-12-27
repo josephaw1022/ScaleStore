@@ -13,6 +13,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\KEDAScalingUI.ServiceDefaults\KEDAScalingUI.ServiceDefaults.csproj" />
+		<ProjectReference Include="..\..\ServiceScalingDTO\ServiceScalingDTO.csproj" />
 		<ProjectReference Include="..\ScaleStoreWebUI.Client\ScaleStoreWebUI.Client.csproj" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.0" />
 	</ItemGroup>

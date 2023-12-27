@@ -8,7 +8,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KEDAScalingUI.ServiceDefaul
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceScalingDb", "ServiceScalingDb\ServiceScalingDb.csproj", "{43A1D640-75B5-4721-9942-EEE7285E1518}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScaleStoreHttpApi", "ScaleStoreHttpApi\ScaleStoreHttpApi.csproj", "{1202CABF-2AFA-4C00-9330-0554B53A2589}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceScalingWebApi", "ScaleStoreHttpApi\ServiceScalingWebApi.csproj", "{1202CABF-2AFA-4C00-9330-0554B53A2589}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScaleStoreAuthenticationWebApi", "ScaleStoreAuthenticationWebApi\ScaleStoreAuthenticationWebApi.csproj", "{F300ED91-9877-454B-9C89-5AD2A5744119}"
 EndProject
@@ -23,6 +23,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScaleStoreWebUI", "ScaleStoreWebUI\ScaleStoreWebUI\ScaleStoreWebUI.csproj", "{2F804896-4CEF-45F6-9B8C-3E4920CA29E3}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScaleStoreWebUI.Client", "ScaleStoreWebUI\ScaleStoreWebUI.Client\ScaleStoreWebUI.Client.csproj", "{9A7CD57A-B6F8-4C48-AA15-360CA4B6A4D2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceScalingDTO", "ServiceScalingDTO\ServiceScalingDTO.csproj", "{192F3C85-B95A-45D0-86F9-AAD03BE228E0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -62,6 +64,10 @@ Global
 		{9A7CD57A-B6F8-4C48-AA15-360CA4B6A4D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9A7CD57A-B6F8-4C48-AA15-360CA4B6A4D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9A7CD57A-B6F8-4C48-AA15-360CA4B6A4D2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{192F3C85-B95A-45D0-86F9-AAD03BE228E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{192F3C85-B95A-45D0-86F9-AAD03BE228E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{192F3C85-B95A-45D0-86F9-AAD03BE228E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{192F3C85-B95A-45D0-86F9-AAD03BE228E0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -73,6 +79,7 @@ Global
 		{4F61CCB2-BF3E-41A2-AA8B-80EAC8211588} = {C1EE0623-B9FD-40F6-A777-BA71068CF55A}
 		{2F804896-4CEF-45F6-9B8C-3E4920CA29E3} = {E877F921-41FB-4E08-8C09-58153D283479}
 		{9A7CD57A-B6F8-4C48-AA15-360CA4B6A4D2} = {E877F921-41FB-4E08-8C09-58153D283479}
+		{192F3C85-B95A-45D0-86F9-AAD03BE228E0} = {5C9D357F-3AC8-4453-89FE-8478AE657F94}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CF99B12B-FFFD-4847-ACD3-EDD1264F46F6}

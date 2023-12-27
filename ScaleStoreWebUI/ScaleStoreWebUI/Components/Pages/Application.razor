@@ -1,9 +1,51 @@
-﻿
+﻿@page "/applications"
+@inject ScaleStoreApiService httpService
+@inject ILogger<ApplicationListModel> logger
 
+<h3>Applications</h3>
 
-
-<h3>Application</h3>
+@if (applications is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Application Name</th>
+                <th>Project ID</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var application in applications)
+            {
+                <tr>
+                    <td>@application.Name</td>
+                    <td>@application.ProjectId</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
 
 @code {
+    private List<ApplicationListModel> applications = null;
+    private int projectId = 1; // This should be set based on your application logic
 
+    protected override async Task OnInitializedAsync()
+    {
+        applications = await httpService.GetApplications(projectId);
+        logger.LogDebug("Applications: {0}", applications);
+    }
+
+    private void EditApplication(int applicationId)
+    {
+        // Navigate to edit application page
+    }
+
+    private void DeleteApplication(int applicationId)
+    {
+        // Confirm and delete application
+    }
 }

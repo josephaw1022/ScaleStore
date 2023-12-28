@@ -1,46 +1,47 @@
-﻿namespace ScaleStoreHttpApi.Requests
+﻿using MediatR;
+using ServiceScalingCore;
+using ServiceScalingDb.ScalingDb;
+
+namespace ScaleStoreHttpApi.Requests;
+
+public class GetScalingConfigurationRequest : IRequest<ScalingConfigurationResponse> , IGetScalingConfigurationRequest
 {
-    using MediatR;
-    using ServiceScalingDb.ScalingDb;
-    using System.Threading;
-    using System.Threading.Tasks;
+    public int ScalingID { get; set; }
+}
 
-    public class GetScalingConfigurationRequest : IRequest<ScalingConfigurationResponse>
+public class ScalingConfigurationResponse : IGetScalingConfigurationResponse
+{
+    public int ScalingID { get; set; }
+    public int ApplicationID { get; set; }
+    public int EnvironmentID { get; set; }
+    public int NumberOfInstances { get; set; }
+}
+
+public class GetScalingConfigurationRequestHandler : IRequestHandler<GetScalingConfigurationRequest, ScalingConfigurationResponse>
+{
+    private readonly ScalingDbContext dbContext;
+
+    public GetScalingConfigurationRequestHandler(ScalingDbContext dbContext)
     {
-        public int ScalingID { get; set; }
+        this.dbContext = dbContext;
     }
 
-    public class ScalingConfigurationResponse
+    public async Task<ScalingConfigurationResponse?> Handle(GetScalingConfigurationRequest request, CancellationToken cancellationToken)
     {
-        public int ScalingID { get; set; }
-        public int ApplicationID { get; set; }
-        public int EnvironmentID { get; set; }
-        public int NumberOfInstances { get; set; }
-    }
+        var config = await dbContext.ScalingConfigurations
+            .FindAsync([request.ScalingID], cancellationToken);
 
-    public class GetScalingConfigurationRequestHandler : IRequestHandler<GetScalingConfigurationRequest, ScalingConfigurationResponse>
-    {
-        private readonly ScalingDbContext dbContext;
-
-        public GetScalingConfigurationRequestHandler(ScalingDbContext dbContext)
+        if (config is null)
         {
-            this.dbContext = dbContext;
+            return null;
         }
 
-        public async Task<ScalingConfigurationResponse> Handle(GetScalingConfigurationRequest request, CancellationToken cancellationToken)
+        return new ScalingConfigurationResponse
         {
-            var config = await dbContext.ScalingConfigurations
-                .FindAsync(new object[] { request.ScalingID }, cancellationToken);
-
-            if (config == null) return null;
-
-            return new ScalingConfigurationResponse
-            {
-                ScalingID = config.ScalingID,
-                ApplicationID = config.ApplicationID,
-                EnvironmentID = config.EnvironmentID,
-                NumberOfInstances = config.NumberOfInstances
-            };
-        }
+            ScalingID = config.ScalingID,
+            ApplicationID = config.ApplicationID,
+            EnvironmentID = config.EnvironmentID,
+            NumberOfInstances = config.NumberOfInstances
+        };
     }
 }

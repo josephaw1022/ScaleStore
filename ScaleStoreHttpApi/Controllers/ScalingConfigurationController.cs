@@ -6,7 +6,7 @@ using ServiceScalingDTO;
 namespace ScaleStoreHttpApi.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class ScalingConfigurationController : ControllerBase
 {
     private readonly IMediator _mediator;

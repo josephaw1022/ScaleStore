@@ -1,11 +1,12 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
+using ServiceScalingCore;
 using ServiceScalingDb.ScalingDb;
 
 namespace ScaleStoreHttpApi.Requests
 {
 
-    public class GetManyScalingConfigurationsRequest : IRequest<List<ScalingConfigurationResponse>>
+    public class GetManyScalingConfigurationsRequest : IRequest<List<ScalingConfigurationsTableViewResponse>>, IGetManyScalingConfigurationsRequest
     {
         public int ProjectID { get; set; }
 
@@ -15,7 +16,22 @@ namespace ScaleStoreHttpApi.Requests
         }
     }
 
-    public class GetManyScalingConfigurationsRequestHandler : IRequestHandler<GetManyScalingConfigurationsRequest, List<ScalingConfigurationResponse>>
+
+    public class ScalingConfigurationsTableViewResponse : IScalingConfigurationTableViewResponse
+    {
+
+        public int Id { get; set; } = default!;
+
+        public string ApplicationName { get; set; } = null!;
+
+        public string EnvironmentName { get; set; } = null!;
+
+
+        public int NumberOfInstances { get; set; } = default!;
+
+    }
+
+    public class GetManyScalingConfigurationsRequestHandler : IRequestHandler<GetManyScalingConfigurationsRequest, List<ScalingConfigurationsTableViewResponse>>
     {
         private readonly ScalingDbContext dbContext;
 
@@ -24,19 +40,22 @@ namespace ScaleStoreHttpApi.Requests
             this.dbContext = dbContext;
         }
 
-        public async Task<List<ScalingConfigurationResponse>> Handle(GetManyScalingConfigurationsRequest request, CancellationToken cancellationToken)
+        public async Task<List<ScalingConfigurationsTableViewResponse>> Handle(GetManyScalingConfigurationsRequest request, CancellationToken cancellationToken)
         {
-            var configs = await dbContext.ScalingConfigurations
-                .Where(c => c.Environment.ProjectID == request.ProjectID)
-                .ToListAsync(cancellationToken);
+            var scalingConfigurations = await dbContext.ScalingConfigurations
+             .Include(sc => sc.Application)
+             .Include(sc => sc.Environment)
+             .Select(sc => new ScalingConfigurationsTableViewResponse
+                {
+                 Id = sc.ScalingID,
+                 ApplicationName = sc.Application.ApplicationName,
+                 EnvironmentName = sc.Environment.EnvironmentName,
+                 NumberOfInstances = sc.NumberOfInstances
+                })
+             .ToListAsync();
 
-            return configs.Select(c => new ScalingConfigurationResponse
-            {
-                ScalingID = c.ScalingID,
-                ApplicationID = c.ApplicationID,
-                EnvironmentID = c.EnvironmentID,
-                NumberOfInstances = c.NumberOfInstances
-            }).ToList();
+
+            return scalingConfigurations;
         }
     }
 

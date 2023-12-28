@@ -1,6 +1,7 @@
 ﻿@page "/environments"
 @inject ScaleStoreApiService httpService
-@inject ILogger<Projects> logger
+@inject ILogger<EnvironmentList> logger
+@attribute [StreamRendering(true)]
 
 
 <h3>Environments</h3>
@@ -26,9 +27,9 @@ else
             @foreach (var environment in environments)
             {
                 <tr>
-                    <td>@environment.environmentName</td>
+                    <td>@environment.EnvironmentName</td>
                     <td>
-                        @environment.projectName
+                        @environment.ProjectName
                     </td>
                 </tr>
             }
@@ -39,7 +40,7 @@ else
 @code {
 
 
-    private List<EnvironmentListModel> environments = null;
+    private List<EnvironmentTableRow>? environments = null;
 
 
     protected override async Task OnInitializedAsync()
@@ -47,15 +48,5 @@ else
         environments = await httpService.GetEnvironments(1);
         logger.LogDebug("Environments: {0}", environments);
 
-    }
-
-    private void EditEnvironment(int environmentId)
-    {
-        // Navigate to edit page
-    }
-
-    private void DeleteEnvironment(int environmentId)
-    {
-        // Confirm and delete project
     }
 }

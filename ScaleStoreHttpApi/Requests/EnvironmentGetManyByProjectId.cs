@@ -3,18 +3,19 @@
 
     using MediatR;
     using Microsoft.EntityFrameworkCore;
+    using ServiceScalingCore;
     using ServiceScalingDb.ScalingDb;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
 
-    public class GetManyEnvironmentsRequest : IRequest<List<GetManyEnvironmentsResponse>>
+    public class GetManyEnvironmentsRequest : IRequest<List<GetManyEnvironmentsResponse>> , IGetManyEnvironmentsRequest
     {
         public int ProjectID { get; set; } = default!;
     }
 
-    public class GetManyEnvironmentsResponse
+    public class GetManyEnvironmentsResponse : IGetManyEnvironmentsResponse
     {
         public int EnvironmentID { get; set; }
         public string EnvironmentName { get; set; } = null!;

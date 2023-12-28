@@ -1,14 +1,15 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using ServiceScalingDb.ScalingDb;
+using ServiceScalingCore;
 
 namespace ScaleStoreHttpApi.Requests;
 
 
 
-public class ProjectsTableViewRequest : IRequest<List<ProjectTableViewRequestResponse>> { }
+public class ProjectsTableViewRequest : IRequest<List<ProjectTableViewRequestResponse>> , IProjectsTableViewRequest { }
 
-public class ProjectTableViewRequestResponse
+public class ProjectTableViewRequestResponse : IProjectTableViewResponse
 {
     public int Id { get; set; } = default!;
     public string Name { get; set; } = null!;

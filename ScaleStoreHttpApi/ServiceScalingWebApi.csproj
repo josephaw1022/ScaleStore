@@ -27,6 +27,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\KEDAScalingUI.ServiceDefaults\KEDAScalingUI.ServiceDefaults.csproj" />
+    <ProjectReference Include="..\ServiceScalingCore\ServiceScalingCore.csproj" />
     <ProjectReference Include="..\ServiceScalingDb\ServiceScalingDb.csproj" />
     <ProjectReference Include="..\ServiceScalingDTO\ServiceScalingDTO.csproj" />
   </ItemGroup>

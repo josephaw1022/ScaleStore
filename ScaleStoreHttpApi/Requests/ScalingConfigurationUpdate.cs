@@ -1,10 +1,11 @@
 ﻿using MediatR;
+using ServiceScalingCore;
 using ServiceScalingDb.ScalingDb;
 
 namespace ScaleStoreHttpApi.Requests
 {
 
-    public class UpdateScalingConfigurationRequest : IRequest<ScalingConfigurationResponse>
+    public class UpdateScalingConfigurationRequest : IRequest<ScalingConfigurationResponse> , IUpdateScalingConfigurationRequest
     {
         public int ScalingID { get; set; }
         public int ApplicationID { get; set; }
@@ -21,7 +22,7 @@ namespace ScaleStoreHttpApi.Requests
             this.dbContext = dbContext;
         }
 
-        public async Task<ScalingConfigurationResponse> Handle(UpdateScalingConfigurationRequest request, CancellationToken cancellationToken)
+        public async Task<ScalingConfigurationResponse?> Handle(UpdateScalingConfigurationRequest request, CancellationToken cancellationToken)
         {
             var config = await dbContext.ScalingConfigurations.FindAsync(request.ScalingID);
 

@@ -1,12 +1,13 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
+using ServiceScalingCore;
 using ServiceScalingDb.ScalingDb;
 
 
 namespace ScaleStoreHttpApi.Requests;
 
 
-public class ApplicationsGetManyRequest : IRequest<List<ApplicationsGetManyRequestResponse>>
+public class ApplicationsGetManyRequest : IRequest<List<ApplicationsGetManyRequestResponse>> , IApplicationsGetManyRequest
 {
     public ApplicationsGetManyRequest(int projectId)
     {
@@ -17,7 +18,7 @@ public class ApplicationsGetManyRequest : IRequest<List<ApplicationsGetManyReque
 }
 
 
-public class ApplicationsGetManyRequestResponse
+public class ApplicationsGetManyRequestResponse : IApplicationsGetManyResponse
 {
     public int Id { get; set; }
     public string Name { get; set; } = null!;

@@ -1,11 +1,12 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
+using ServiceScalingCore;
 using ServiceScalingDb.ScalingDb;
 
 
 namespace ScaleStoreHttpApi.Requests
 {
-    public class ProjectsGetOneRequest: IRequest<ProjectsGetOneRequestResponse>
+    public class ProjectsGetOneRequest: IRequest<ProjectsGetOneRequestResponse> , IProjectsGetOneRequest
     {
         public ProjectsGetOneRequest(int id)
         {
@@ -16,7 +17,7 @@ namespace ScaleStoreHttpApi.Requests
     }
 
 
-    public class ProjectsGetOneRequestResponse
+    public class ProjectsGetOneRequestResponse : IProjectsGetOneResponse
     {
         public int Id { get; set; } = default!;
         public string Name { get; set; } = null!;

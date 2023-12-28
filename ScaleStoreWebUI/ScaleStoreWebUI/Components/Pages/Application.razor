@@ -1,6 +1,8 @@
 ﻿@page "/applications"
 @inject ScaleStoreApiService httpService
-@inject ILogger<ApplicationListModel> logger
+@inject ILogger<Application> logger
+@attribute [StreamRendering(true)]
+
 
 <h3>Applications</h3>
 
@@ -30,8 +32,8 @@ else
 }
 
 @code {
-    private List<ApplicationListModel> applications = null;
-    private int projectId = 1; // This should be set based on your application logic
+    private List<ApplicationTableRow>? applications = null;
+    private int projectId = 1;
 
     protected override async Task OnInitializedAsync()
     {

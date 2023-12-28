@@ -1,0 +1,39 @@
+﻿@inject ProjectStateService ProjectState
+
+
+<div class="top-row px-4">
+    <div class="m-3 top-row-items">
+    <h5 class="text-primary">Select a Project</h5>
+        <p>Select from the list to view project details:</p>
+        <select class="form-select" @bind="ProjectState.SelectedProject">
+            @foreach (var project in ProjectNames)
+            {
+                <option value="@project">@project</option>
+            }
+        </select>
+    </div>
+</div>
+
+@code {
+    private List<string> ProjectNames { get; set; }
+
+    protected override void OnInitialized()
+    {
+        ProjectNames = new List<string> { "Test Project", "Maricopa County", "Nantucket County" };
+
+        if (string.IsNullOrEmpty(ProjectState.SelectedProject))
+        {
+            ProjectState.SetSelectedProject(ProjectNames.First());
+        }
+    }
+
+    protected override void OnParametersSet()
+    {
+        ProjectState.OnChange += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        ProjectState.OnChange -= StateHasChanged;
+    }
+}

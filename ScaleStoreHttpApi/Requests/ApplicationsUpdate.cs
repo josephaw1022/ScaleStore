@@ -1,11 +1,12 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using ServiceScalingDb.ScalingDb;
+using ServiceScalingCore;
 
 namespace ScaleStoreHttpApi.Requests;
 
 
-public class UpdateApplicationRequest : IRequest<UpdateApplicationResponse>
+public class UpdateApplicationRequest : IRequest<UpdateApplicationResponse> , IUpdateApplicationRequest
 {
     public int Id { get; set; }
     public string Name { get; set; }
@@ -20,7 +21,7 @@ public class UpdateApplicationRequest : IRequest<UpdateApplicationResponse>
 }
 
 
-public class UpdateApplicationResponse
+public class UpdateApplicationResponse : IUpdateApplicationResponse
 {
     public int Id { get; set; }
     public string Name { get; set; } = null!;

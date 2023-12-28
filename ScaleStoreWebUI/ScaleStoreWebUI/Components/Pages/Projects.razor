@@ -1,6 +1,7 @@
 ﻿@page "/projects"
 @inject ScaleStoreApiService httpService
 @inject ILogger<Projects> logger
+@attribute [StreamRendering(true)]
 
 
 <h3>Projects</h3>
@@ -23,9 +24,9 @@ else
             @foreach (var project in projects)
             {
                 <tr>
-                    <td>@project.name</td>
-                    <td>@project.numberOfEnvironments</td>
-                    <td>@project.numberOfApplications</td>
+                    <td>@project.Name</td>
+                    <td>@project.NumberOfEnvironments</td>
+                    <td>@project.NumberOfApplications</td>
                 </tr>
             }
         </tbody>
@@ -35,22 +36,12 @@ else
 @code {
 
 
-    private List<ProjectsListModel> projects = null;
+    private List<ProjectTableRow>? projects = null;
 
     protected override async Task OnInitializedAsync()
     {
         projects = await httpService.GetProjects();
         logger.LogDebug("Projects: {0}", projects);
 
-    }
-
-    private void EditProject(int projectId)
-    {
-        // Navigate to edit page
-    }
-
-    private void DeleteProject(int projectId)
-    {
-        // Confirm and delete project
     }
 }

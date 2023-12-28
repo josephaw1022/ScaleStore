@@ -1,9 +1,10 @@
 ﻿using MediatR;
+using ServiceScalingCore;
 using ServiceScalingDb.ScalingDb;
 
 namespace ScaleStoreHttpApi.Requests;
 
-public class CreateProjectResponse
+public class CreateProjectResponse : ICreateProjectResponse
 {
     public int Id { get; set; } = default!;
     public string Name { get; set; } = null!;
@@ -11,7 +12,7 @@ public class CreateProjectResponse
 
 
 
-public class CreateProjectRequest : IRequest<CreateProjectResponse>
+public class CreateProjectRequest : IRequest<CreateProjectResponse> , ICreateProjectRequest
 {
     public string Name { get; set; } = null!;
 

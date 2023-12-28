@@ -1,0 +1,61 @@
+﻿@page "/scaling-configurations"
+@inject ScaleStoreApiService httpService
+@inject ILogger<ScalingConfigurations> logger
+@attribute [StreamRendering(true)]
+
+
+
+<PageTitle>
+    Scale Configurations For Project @ProjectId
+</PageTitle>
+
+
+<h3>Scaling Configuration</h3>
+
+<button class="btn btn-primary">
+    Create
+</button>
+
+@if (scalingConfigurations is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Environment Name</th>
+                <th>Application Name</th>
+                <th>
+                    Number of Instances
+                </th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var scalingConfiguration in scalingConfigurations)
+            {
+                <tr>
+                    <td>@scalingConfiguration.EnvironmentName</td>
+                    <td>@scalingConfiguration.ApplicationName</td>
+                    <td>@scalingConfiguration.NumberOfInstances</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+}
+
+@code {
+    private List<ScalingConfigurationTableRow>? scalingConfigurations = null;
+    private int ProjectId = 1;
+
+    protected override async Task OnInitializedAsync()
+    {
+        scalingConfigurations = await httpService.GetScalingConfigurations(ProjectId);
+        logger.LogDebug("Scaling Configurations: {0}", scalingConfigurations);
+    }
+
+}

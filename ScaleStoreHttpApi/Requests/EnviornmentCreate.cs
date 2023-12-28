@@ -1,15 +1,16 @@
 ﻿using MediatR;
+using ServiceScalingCore;
 using ServiceScalingDb.ScalingDb;
 
 namespace ScaleStoreHttpApi.Requests;
-public class CreateEnvironmentRequest : IRequest<CreateEnvironmentResponse>
+public class CreateEnvironmentRequest : IRequest<CreateEnvironmentResponse> , ICreateEnvironmentRequest
 {
     public string EnvironmentName { get; set; } = null!;
     public int ProjectID { get; set; }
 
 }
 
-public class CreateEnvironmentResponse
+public class CreateEnvironmentResponse : ICreateEnvironmentResponse
 {
     public int EnvironmentID { get; set; }
     public string EnvironmentName { get; set; } = null!;

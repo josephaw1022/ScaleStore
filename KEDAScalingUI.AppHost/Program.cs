@@ -11,8 +11,10 @@ var authenticationdbApp = builder.AddProject<Projects.ScaleStoreAuthenticationDb
     .WithReference(authenticationDb);
 
 var authenticationHttpApi = builder.AddProject<Projects.ScaleStoreAuthenticationWebApi>("authentication-webapi")
-    .WithReference(authenticationDb);
-
+    .WithReference(authenticationDb)
+    .WithEnvironment("Jwt:Key", "YourSuperSecretKey") // Should be a long, random string
+    .WithEnvironment("Jwt:Issuer", "YourIssuer")
+    .WithEnvironment("Jwt:Audience", "YourAudience");
 
 // Scaling
 var scalingDb = builder.AddPostgresContainer("scalestore-db", 5433)

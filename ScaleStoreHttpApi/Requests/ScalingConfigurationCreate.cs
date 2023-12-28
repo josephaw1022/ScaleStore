@@ -1,9 +1,10 @@
 ﻿using MediatR;
 using ServiceScalingDb.ScalingDb;
+using ServiceScalingCore;
 
 namespace ScaleStoreHttpApi.Requests
 {
-    public class CreateScalingConfigurationRequest : IRequest<ScalingConfigurationResponse>
+    public class CreateScalingConfigurationRequest : IRequest<ScalingConfigurationResponse> , ICreateScalingConfigurationRequest
     {
         public int ApplicationID { get; set; }
         public int EnvironmentID { get; set; }

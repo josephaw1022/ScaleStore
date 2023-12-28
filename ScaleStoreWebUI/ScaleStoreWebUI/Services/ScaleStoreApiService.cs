@@ -1,64 +1,80 @@
-﻿using ServiceScalingDTO;
+﻿using ServiceScalingCore;
 
-namespace ScaleStoreWebUI.Services
+namespace ScaleStoreWebUI.Services;
+
+public class ScaleStoreApiService(HttpClient httpClient)
 {
-    public class ScaleStoreApiService(HttpClient httpClient)
+    public async Task<List<ProjectTableRow>?> GetProjects()
     {
+        return await httpClient.GetFromJsonAsync<List<ProjectTableRow>>("api/projects");
+    }
 
-        public async Task<List<ProjectsListModel>> GetProjects()
-        {
-            return await httpClient.GetFromJsonAsync<List<ProjectsListModel>>("api/projects");
-        }
+    public async Task<List<EnvironmentTableRow>?> GetEnvironments(int projectId)
+    {
+        return await httpClient.GetFromJsonAsync<List<EnvironmentTableRow>>($"api/environment?projectId={projectId}");
+    }
 
-
-
-        public async Task<List<EnvironmentListModel>> GetEnvironments(int projectId)
-        {
-            return await httpClient.GetFromJsonAsync<List<EnvironmentListModel>>($"api/environment?projectId={projectId}");
-        }
-
-
-        public async Task<List<ApplicationListModel>> GetApplications(int projectId)
-        {
-            return await httpClient.GetFromJsonAsync<List<ApplicationListModel>>($"api/application?projectId={projectId}");
-        }
+    public async Task<List<ApplicationTableRow>?> GetApplications(int projectId)
+    {
+        return await httpClient.GetFromJsonAsync<List<ApplicationTableRow>>($"api/application?projectId={projectId}");
     }
 
 
-    public class ApplicationListModel
+    public async Task<List<ScalingConfigurationTableRow>?> GetScalingConfigurations(int projectId)
     {
-        public int Id { get; set; }
-
-        public string Name { get; set; } = null!;
-
-
-        public int ProjectId { get; set; }
-
+        return await httpClient.GetFromJsonAsync<List<ScalingConfigurationTableRow>>($"api/ScalingConfiguration?projectId={projectId}");
     }
 
 
-
-
-    public class ProjectsListModel
-    {
-        public string name { get; set; } = null!;
-
-        public int numberOfApplications { get; set; }
-
-        public int numberOfEnvironments { get; set; }
-
-    }
+}
 
 
 
-    public class EnvironmentListModel
-    {
+public class ProjectTableRow : IProjectTableViewResponse
+{
+    public int Id { get; set; }
+    public string Name { get; set; } = null!;
+    public int NumberOfEnvironments { get; set; }
+    public int NumberOfApplications { get; set; }
+}
 
-        public int environmentID { get; set; }
 
-        public string environmentName { get; set; } = null!;
+public class EnvironmentTableRow : IGetManyEnvironmentsResponse
+{
 
-        public string projectName { get; set; } = null!;
-    }
+    public int EnvironmentID { get; set; }
 
+    public string EnvironmentName { get; set; } = null!;
+
+    
+    public string ProjectName { get; set; } = null!;
+
+ }
+
+
+public class ApplicationTableRow : IApplicationsGetManyResponse
+{
+    public int Id { get; set; }
+
+    public string Name { get; set; } = null!;
+
+    public int ProjectId { get; set; }
+}
+
+
+public class ScalingConfigurationTableRow : IGetScalingConfigurationResponse
+{
+    public int ScalingID { get; set; }
+
+    public int ApplicationID { get; set; }
+
+    public int EnvironmentID { get; set; }
+
+    public int NumberOfInstances { get; set; }
+
+    public string ApplicationName { get; set; } = null!;
+
+    public string EnvironmentName { get; set; } = null!;
+
+    public string ProjectName { get; set; } = null!;
 }

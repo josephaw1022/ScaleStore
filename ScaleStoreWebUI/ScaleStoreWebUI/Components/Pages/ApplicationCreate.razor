@@ -1,0 +1,35 @@
+﻿@page "/applications/create"
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <h2>Create Application</h2>
+            <EditForm Model="@applicationCreateModel" OnValidSubmit="@HandleValidSubmit">
+                <DataAnnotationsValidator />
+
+                <div class="mb-3">
+                    <label for="appName" class="form-label">Application Name</label>
+                    <InputText id="appName" class="form-control" @bind-Value="@applicationCreateModel.Name" />
+                    <ValidationMessage For="@(() => applicationCreateModel.Name)" />
+                </div>
+
+              
+                <button type="submit" class="btn btn-primary">Create</button>
+            </EditForm>
+        </div>
+    </div>
+</div>
+
+@code {
+    private ApplicationCreateModel applicationCreateModel = new();
+
+    private async Task HandleValidSubmit()
+    {
+
+    }
+
+    public class ApplicationCreateModel
+    {
+        public string Name { get; set; }
+    }
+}

@@ -24,9 +24,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScaleStoreWebUI", "ScaleSto
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScaleStoreWebUI.Client", "ScaleStoreWebUI\ScaleStoreWebUI.Client\ScaleStoreWebUI.Client.csproj", "{9A7CD57A-B6F8-4C48-AA15-360CA4B6A4D2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceScalingDTO", "ServiceScalingDTO\ServiceScalingDTO.csproj", "{192F3C85-B95A-45D0-86F9-AAD03BE228E0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceScalingDTO", "ServiceScalingDTO\ServiceScalingDTO.csproj", "{192F3C85-B95A-45D0-86F9-AAD03BE228E0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceScalingCore", "ServiceScalingCore\ServiceScalingCore.csproj", "{618ECB26-7A25-4392-8F7D-C72B13FA1486}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceScalingCore", "ServiceScalingCore\ServiceScalingCore.csproj", "{618ECB26-7A25-4392-8F7D-C72B13FA1486}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

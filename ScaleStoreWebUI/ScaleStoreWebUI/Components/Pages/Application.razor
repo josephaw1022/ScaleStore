@@ -1,10 +1,15 @@
 ﻿@page "/applications"
 @inject ScaleStoreApiService httpService
 @inject ILogger<Application> logger
+@inject NavigationManager navigation 
 @attribute [StreamRendering(true)]
 
 
 <h3>Applications</h3>
+
+<NavLink class="btn btn-primary" href="/applications/create">
+    Create
+</NavLink>
 
 @if (applications is null)
 {
@@ -50,4 +55,5 @@ else
     {
         // Confirm and delete application
     }
-}
+   
+    }

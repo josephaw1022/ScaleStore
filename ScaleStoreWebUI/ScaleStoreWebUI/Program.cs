@@ -9,7 +9,7 @@ builder.AddServiceDefaults();
 
 
 
-builder.Services.AddSingleton<ProjectStateService>();
+builder.Services.AddScoped<ProjectStateService>();
 
 
 // Add services to the container.

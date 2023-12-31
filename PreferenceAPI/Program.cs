@@ -1,6 +1,11 @@
+using PreferenceAPI.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
+
+// Add MongoDB support
+builder.AddMongoDBClient("preference");
 
 // Add services to the container.
 
@@ -8,6 +13,12 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// Add HttpClient ServiceScalingHttpApiService to communicate with the ServiceScalingWebApi
+builder.Services.AddHttpClient<ServiceScalingHttpApiService>(client => client.BaseAddress = new("http://scalestore-webapi"));
+
+// Add ProjectPreferenceService to communicate with the MongoDB database
+builder.Services.AddScoped<ProjectPreferenceService>();
 
 var app = builder.Build();
 
@@ -21,7 +32,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();

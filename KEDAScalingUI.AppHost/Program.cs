@@ -3,15 +3,15 @@ var builder = DistributedApplication.CreateBuilder(args);
 
 // Authentication/Authorization
 
-var authenticationDb = builder.AddPostgresContainer("authentication-db", 5432)
-                              .AddDatabase("authentication");
+//var authenticationDb = builder.AddPostgresContainer("authentication-db", 5432)
+//                              .AddDatabase("authentication");
 
-var authenticationdbApp = builder.AddProject<Projects.ScaleStoreAuthenticationDb>("authentication-dbapp")
-    .WithReference(authenticationDb);
+//var authenticationdbApp = builder.AddProject<Projects.ScaleStoreAuthenticationDb>("authentication-dbapp")
+//    .WithReference(authenticationDb);
 
-var authenticationHttpApi = builder.AddProject<Projects.ScaleStoreAuthenticationWebApi>("authentication-webapi")
-    .WithReference(authenticationDb);
-    
+//var authenticationHttpApi = builder.AddProject<Projects.ScaleStoreAuthenticationWebApi>("authentication-webapi")
+//    .WithReference(authenticationDb);
+
 // Scaling
 var scalingDb = builder.AddPostgresContainer("scalestore-db", 5433)
     .AddDatabase("scalestore");
@@ -19,19 +19,24 @@ var scalingDb = builder.AddPostgresContainer("scalestore-db", 5433)
 var scalingdbApp = builder.AddProject<Projects.ServiceScalingDb>("scalestore-dbapp")
                     .WithReference(scalingDb);
 
+var scaleStoreCache = builder.AddRedisContainer("scalestore-cache", 6379);
+
+
 var scaleStoreHttpApi = builder.AddProject<Projects.ServiceScalingWebApi>("scalestore-webapi")
     .WithReference(scalingDb)
-    .WithReference(authenticationHttpApi);
-
-
+    .WithReference(scaleStoreCache);
 
 // Preference Service
-var preferenceApi = builder.AddProject<Projects.PreferenceAPI>("preferenceapi");
+var preferenceDb = builder.AddMongoDBContainer("preference-db", 27017)
+    .AddDatabase("preference");
 
-
+var preferenceHttpApi = builder.AddProject<Projects.PreferenceAPI>("preferenceapi")
+                           .WithReference(preferenceDb)
+                           .WithReference(scaleStoreHttpApi);
 
 // web ui
 var webUi = builder.AddProject<Projects.ScaleStoreWebUI>("scalestorewebui")
-    .WithReference(scaleStoreHttpApi);
+    .WithReference(scaleStoreHttpApi)
+    .WithReference(preferenceHttpApi);
 
 builder.Build().Run();

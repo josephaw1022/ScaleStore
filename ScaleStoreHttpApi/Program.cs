@@ -5,6 +5,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
 
+builder.AddRedisOutputCache("scalestore-cache");
 builder.AddNpgsqlDbContext<ScalingDbContext>("scalestore");
 
 builder.Services.AddControllers();
@@ -28,6 +29,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseAuthorization();
 app.UseAuthentication();
+
+app.UseOutputCache();
 
 app.MapControllers();
 

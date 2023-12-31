@@ -3,11 +3,14 @@ using ServiceScalingDb.ScalingDb;
 using ServiceScalingDTO;
 using MediatR;
 using ScaleStoreHttpApi.Requests;
+using ServiceScalingWebApi.Requests;
+using Microsoft.AspNetCore.OutputCaching;
 
 namespace ScaleStoreHttpApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [OutputCache(Duration = 60)]
     public class ProjectsController : ControllerBase
     {
 
@@ -18,15 +21,22 @@ namespace ScaleStoreHttpApi.Controllers
             _mediator = mediator;
         }
 
-        // GET: api/Projects
         [HttpGet]
         public async Task<ActionResult<List<ProjectsGetOneRequestResponse>>> GetProjects()
         {
             return Ok(await _mediator.Send(new ProjectsTableViewRequest()));
         }
 
-        // GET: api/Projects/5
-        [HttpGet("{id}")]
+
+        [HttpGet]
+        [Route("names")]
+        public async Task <ActionResult<List<ProjectGetManyNamesResponseItem>>> GetProjectNames()
+        {
+            var result = await _mediator.Send(new ProjectGetManyNamesRequest());
+            return Ok(result);
+        }
+
+        [HttpGet("{id:int}")]
         public async Task<ActionResult<ProjectsGetOneRequestResponse>> GetProject(int id)
         {
             var project = await _mediator.Send(new ProjectsGetOneRequest(id));
@@ -39,9 +49,7 @@ namespace ScaleStoreHttpApi.Controllers
             return Ok(project);
         }
 
-        // PUT: api/Projects/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
+        [HttpPut("{id:int}")]
         public async Task<IActionResult> PutProject(int id, ProjectUpdateDTO project)
         {
             if (id != project.Id)
@@ -62,8 +70,6 @@ namespace ScaleStoreHttpApi.Controllers
             return NoContent();
         }
 
-        // POST: api/Projects
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<Project>> PostProject(ProjectCreateDTO updateProject)
         {
@@ -75,8 +81,7 @@ namespace ScaleStoreHttpApi.Controllers
 
         }
 
-        // DELETE: api/Projects/5
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeleteProject(int id)
         {
             throw new NotImplementedException();

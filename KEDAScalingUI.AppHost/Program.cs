@@ -11,7 +11,7 @@ var authenticationdbApp = builder.AddProject<Projects.ScaleStoreAuthenticationDb
 
 var authenticationHttpApi = builder.AddProject<Projects.ScaleStoreAuthenticationWebApi>("authentication-webapi")
     .WithReference(authenticationDb);
-    
+
 // Scaling
 var scalingDb = builder.AddPostgresContainer("scalestore-db", 5433)
     .AddDatabase("scalestore");
@@ -26,12 +26,16 @@ var scaleStoreHttpApi = builder.AddProject<Projects.ServiceScalingWebApi>("scale
 
 
 // Preference Service
-var preferenceApi = builder.AddProject<Projects.PreferenceAPI>("preferenceapi");
+var preferenceDb = builder.AddMongoDBContainer("preference-db", 27017)
+    .AddDatabase("preference");
 
-
+var preferenceHttpApi = builder.AddProject<Projects.PreferenceAPI>("preferenceapi")
+                           .WithReference(preferenceDb)
+                           .WithReference(scaleStoreHttpApi);
 
 // web ui
 var webUi = builder.AddProject<Projects.ScaleStoreWebUI>("scalestorewebui")
-    .WithReference(scaleStoreHttpApi);
+    .WithReference(scaleStoreHttpApi)
+    .WithReference(preferenceHttpApi);
 
 builder.Build().Run();

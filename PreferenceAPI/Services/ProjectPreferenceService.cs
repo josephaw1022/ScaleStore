@@ -91,7 +91,7 @@ public class ProjectPreferenceService
 
             return true;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             // TODO: Log the exception
             return false;

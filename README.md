@@ -60,3 +60,11 @@ spec:
 ## Note
 - **Current Development Stage**: Scale Store is in active development and may not yet fulfill all production-ready criteria.
 - **Community Contribution**: We welcome feedback and contributions to enhance Scale Store's capabilities and usability.
+
+
+# Azure DevOps Board
+
+This document provides a direct link to the Azure DevOps Board for ScaleStore.
+
+[Access the ScaleStore Team's Azure DevOps Board here](https://dev.azure.com/OpenStoreK8s/ScaleStore/_boards/board/t/ScaleStore%20Team/Issues)
+

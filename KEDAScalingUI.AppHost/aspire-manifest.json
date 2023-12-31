@@ -1,0 +1,149 @@
+{
+  "resources": {
+    "authentication-db": {
+      "type": "postgres.server.v0"
+    },
+    "authentication": {
+      "type": "postgres.database.v0",
+      "parent": "authentication-db"
+    },
+    "authentication-dbapp": {
+      "type": "project.v0",
+      "path": "..\\ScaleStoreAuthenticationDb\\ScaleStoreAuthenticationDb.csproj",
+      "env": {
+        "OTEL_DOTNET_EXPERIMENTAL_OTLP_EMIT_EXCEPTION_LOG_ATTRIBUTES": "true",
+        "OTEL_DOTNET_EXPERIMENTAL_OTLP_EMIT_EVENT_LOG_ATTRIBUTES": "true",
+        "ConnectionStrings__authentication": "{authentication.connectionString}"
+      },
+      "bindings": {
+        "http": {
+          "scheme": "http",
+          "protocol": "tcp",
+          "transport": "http"
+        },
+        "https": {
+          "scheme": "https",
+          "protocol": "tcp",
+          "transport": "http"
+        }
+      }
+    },
+    "authentication-webapi": {
+      "type": "project.v0",
+      "path": "..\\ScaleStoreAuthenticationWebApi\\ScaleStoreAuthenticationWebApi.csproj",
+      "env": {
+        "OTEL_DOTNET_EXPERIMENTAL_OTLP_EMIT_EXCEPTION_LOG_ATTRIBUTES": "true",
+        "OTEL_DOTNET_EXPERIMENTAL_OTLP_EMIT_EVENT_LOG_ATTRIBUTES": "true",
+        "ConnectionStrings__authentication": "{authentication.connectionString}",
+        "Jwt:Key": "YourSuperSecretKey",
+        "Jwt:Issuer": "YourIssuer",
+        "Jwt:Audience": "YourAudience"
+      },
+      "bindings": {
+        "http": {
+          "scheme": "http",
+          "protocol": "tcp",
+          "transport": "http"
+        },
+        "https": {
+          "scheme": "https",
+          "protocol": "tcp",
+          "transport": "http"
+        }
+      }
+    },
+    "scalestore-db": {
+      "type": "postgres.server.v0"
+    },
+    "scalestore": {
+      "type": "postgres.database.v0",
+      "parent": "scalestore-db"
+    },
+    "scalestore-dbapp": {
+      "type": "project.v0",
+      "path": "..\\ServiceScalingDb\\ServiceScalingDb.csproj",
+      "env": {
+        "OTEL_DOTNET_EXPERIMENTAL_OTLP_EMIT_EXCEPTION_LOG_ATTRIBUTES": "true",
+        "OTEL_DOTNET_EXPERIMENTAL_OTLP_EMIT_EVENT_LOG_ATTRIBUTES": "true",
+        "ConnectionStrings__scalestore": "{scalestore.connectionString}"
+      },
+      "bindings": {
+        "http": {
+          "scheme": "http",
+          "protocol": "tcp",
+          "transport": "http"
+        },
+        "https": {
+          "scheme": "https",
+          "protocol": "tcp",
+          "transport": "http"
+        }
+      }
+    },
+    "scalestore-webapi": {
+      "type": "project.v0",
+      "path": "..\\ScaleStoreHttpApi\\ServiceScalingWebApi.csproj",
+      "env": {
+        "OTEL_DOTNET_EXPERIMENTAL_OTLP_EMIT_EXCEPTION_LOG_ATTRIBUTES": "true",
+        "OTEL_DOTNET_EXPERIMENTAL_OTLP_EMIT_EVENT_LOG_ATTRIBUTES": "true",
+        "ConnectionStrings__scalestore": "{scalestore.connectionString}",
+        "services__authentication-webapi__0": "{authentication-webapi.bindings.http.url}",
+        "services__authentication-webapi__1": "{authentication-webapi.bindings.https.url}"
+      },
+      "bindings": {
+        "http": {
+          "scheme": "http",
+          "protocol": "tcp",
+          "transport": "http"
+        },
+        "https": {
+          "scheme": "https",
+          "protocol": "tcp",
+          "transport": "http"
+        }
+      }
+    },
+    "preferenceapi": {
+      "type": "project.v0",
+      "path": "..\\PreferenceAPI\\PreferenceAPI.csproj",
+      "env": {
+        "OTEL_DOTNET_EXPERIMENTAL_OTLP_EMIT_EXCEPTION_LOG_ATTRIBUTES": "true",
+        "OTEL_DOTNET_EXPERIMENTAL_OTLP_EMIT_EVENT_LOG_ATTRIBUTES": "true"
+      },
+      "bindings": {
+        "http": {
+          "scheme": "http",
+          "protocol": "tcp",
+          "transport": "http"
+        },
+        "https": {
+          "scheme": "https",
+          "protocol": "tcp",
+          "transport": "http"
+        }
+      }
+    },
+    "scalestorewebui": {
+      "type": "project.v0",
+      "path": "..\\ScaleStoreWebUI\\ScaleStoreWebUI\\ScaleStoreWebUI.csproj",
+      "env": {
+        "OTEL_DOTNET_EXPERIMENTAL_OTLP_EMIT_EXCEPTION_LOG_ATTRIBUTES": "true",
+        "OTEL_DOTNET_EXPERIMENTAL_OTLP_EMIT_EVENT_LOG_ATTRIBUTES": "true",
+        "services__scalestore-webapi__0": "{scalestore-webapi.bindings.http.url}",
+        "services__scalestore-webapi__1": "{scalestore-webapi.bindings.https.url}"
+      },
+      "bindings": {
+        "http": {
+          "scheme": "http",
+          "protocol": "tcp",
+          "transport": "http"
+        },
+        "https": {
+          "scheme": "https",
+          "protocol": "tcp",
+          "transport": "http"
+        }
+      }
+    }
+  }
+}

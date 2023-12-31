@@ -22,25 +22,19 @@ public class ScalingDbContext : DbContext
 
         modelBuilder.Entity<Project>()
             .HasMany(p => p.Environments)
-            .WithOne(e => e.Project)
-            .HasForeignKey(e => e.ProjectID);
+            .WithOne(e => e.Project);
 
         modelBuilder.Entity<Project>()
             .HasMany(p => p.Applications)
-            .WithOne(a => a.Project)
-            .HasForeignKey(a => a.ProjectID);
+            .WithOne(a => a.Project);
 
         modelBuilder.Entity<Application>()
             .HasMany(a => a.ScalingConfigurations)
-            .WithOne(sc => sc.Application)
-            .HasForeignKey(sc => sc.ApplicationID)
-            .OnDelete(DeleteBehavior.Restrict); // Changed to Restrict
+            .WithOne(sc => sc.Application);
 
         modelBuilder.Entity<Environment>()
             .HasMany(e => e.ScalingConfigurations)
-            .WithOne(sc => sc.Environment)
-            .HasForeignKey(sc => sc.EnvironmentID)
-            .OnDelete(DeleteBehavior.Restrict); // Changed to Restrict
+            .WithOne(sc => sc.Environment);
     }
 
 }

@@ -18,14 +18,15 @@ public class ProjectPreferenceController(ProjectPreferenceService projectPrefere
     }
 
     [HttpPut("{projectId:int}/{userId:int}")]
-    public async Task<IActionResult> UpdateProjectPreference(int projectId, int userId)
+    public async Task<IResult> UpdateProjectPreference(int projectId, int userId)
     {
         var result = await projectPreferenceService.UpdateProjectPreferenceAsync(projectId, userId);
+
         if (result)
         {
-            return Ok("Project preference updated successfully.");
+            return Results.Ok("Project preference updated successfully.");
         }
 
-        return BadRequest("Unable to update project preference.");
+        return Results.BadRequest("Unable to update project preference.");
     }
 }

@@ -17,4 +17,12 @@ namespace ServiceScalingCore
         int NumberOfApplications { get; set; }
     }
 
+    public interface IProjectGetManyNamesRequest {  }
+
+    public interface IProjectGetManyNamesResponseItem
+    {
+        int Id { get; set; }
+        string Name { get; set; }
+    }
+
 }

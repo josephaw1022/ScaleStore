@@ -8,11 +8,16 @@ namespace PreferenceAPI.Services;
 public class ProjectPreferenceService
 {
     private readonly IMongoCollection<ProjectPreferenceCollection> _projectPreferencesCollection;
+    private readonly ILogger<ProjectPreferenceService> _logger;
+    private readonly ServiceScalingHttpApiService _serviceScalingHttpClient;
 
-    public ProjectPreferenceService(IMongoClient mongoClient)
+
+    public ProjectPreferenceService(IMongoClient mongoClient, ILogger<ProjectPreferenceService> logger, ServiceScalingHttpApiService serviceScalingHttpClient)
     {
         _projectPreferencesCollection = mongoClient.GetDatabase("preference")
                                                    .GetCollection<ProjectPreferenceCollection>("projectpreferences");
+        _logger = logger;
+        _serviceScalingHttpClient = serviceScalingHttpClient;
     }
 
     public async Task<IProjectPreference> GetProjectPreferenceAsync(int userId)
@@ -28,13 +33,29 @@ public class ProjectPreferenceService
         }
 
 
-        // If the project preference does not exist, create it
-        await _projectPreferencesCollection.InsertOneAsync(new ProjectPreferenceCollection
+        // If the project preference does not exist, get the list of projects from the Projects API and choose the first one as the default (alphabetical order)
+        var projectToInsert = new ProjectPreferenceCollection
         {
             ProjectId = 0,
             UserId = userId
-        });
+        };
 
+        var existingProjectsFromScalingApi = await _serviceScalingHttpClient.GetListOfProjects(userId);
+
+        // If no items are returned from the scaling api, insert the default project preference
+        if(existingProjectsFromScalingApi.Count == 0)
+        {
+            await _projectPreferencesCollection.InsertOneAsync(projectToInsert);
+            return projectToInsert;
+        }
+        
+        // If items are returned from the scaling api, insert the first item as the default project preference
+        var firstProject = existingProjectsFromScalingApi.OrderBy(p => p.Name).First();
+
+        projectToInsert.ProjectId = firstProject.Id;
+        
+        _projectPreferencesCollection.InsertOne(projectToInsert);
+        
         var newProjectPreference = await _projectPreferencesCollection
          .Find(p => p.UserId == userId)
          .FirstOrDefaultAsync();

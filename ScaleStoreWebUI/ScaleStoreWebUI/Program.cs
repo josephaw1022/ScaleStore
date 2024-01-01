@@ -7,21 +7,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.AddServiceDefaults();
 
 
-
-
-builder.Services.AddScoped<ProjectStateService>();
-
-
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents()
     .AddInteractiveWebAssemblyComponents();
 
-
-builder.Services.AddHttpClient<ScaleStoreApiService>(client => {
-    client.BaseAddress = new("http://scalestore-webapi");
-    }
-);
+builder.Services.AddHttpClient<ProjectPreferenceApiService>(client => client.BaseAddress = new("http://preferenceapi"));
+builder.Services.AddHttpClient<ScaleStoreApiService>(client => client.BaseAddress = new("http://scalestore-webapi"));
 
 var app = builder.Build();
 

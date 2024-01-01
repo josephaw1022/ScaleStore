@@ -8,9 +8,9 @@ using Microsoft.AspNetCore.OutputCaching;
 
 namespace ScaleStoreHttpApi.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
-    [OutputCache(Duration = 60)]
+    [Route("api/[controller]")]
+    [OutputCache(Duration = 5)]
     public class ProjectsController : ControllerBase
     {
 

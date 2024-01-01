@@ -49,92 +49,114 @@ internal sealed class ScalingDbInitializer : BackgroundService
 
     private async Task SeedProjectAsync(ScalingDbContext dbContext, CancellationToken cancellationToken)
     {
-        // create a single project
-        var project = new Project
-        {
-            ProjectName = "Test Project"
-        };
+        await SeedProjectOne(dbContext, cancellationToken);
+        await SeedProjectTwo(dbContext, cancellationToken);
+    }
 
-        dbContext.Projects.Add(project);
+
+
+    private async Task SeedProjectOne(ScalingDbContext dbContext, CancellationToken cancellationToken)
+    {
+        var project1 = new Project { ProjectName = "PathwayPlus" };
+        await dbContext.Projects.AddAsync(project1);
         await dbContext.SaveChangesAsync(cancellationToken);
 
-        project = await dbContext.Projects
-            .Where(p => p.ProjectName == "Test Project")
-            .FirstOrDefaultAsync(cancellationToken);
+        var devEnvironment = new Environment { EnvironmentName = "DevSite1", Project = project1};
+        var devEnvironment2 = new Environment { EnvironmentName = "DevSite2", Project = project1 };
+        var devEnvironment3 = new Environment { EnvironmentName = "DevSite3", Project = project1 };
 
-        // create two dev environments
-        var devEnvironment = new Environment
-        {
-            EnvironmentName = "Dev",
-            ProjectID = 1
-        };
-
-        var devEnvironment2 = new Environment
-        {
-            EnvironmentName = "Dev2",
-            ProjectID = 1
-        };
-
-        await dbContext.Environments.AddRangeAsync(devEnvironment, devEnvironment2);
+        await dbContext.Environments.AddRangeAsync(devEnvironment, devEnvironment2, devEnvironment3);
         await dbContext.SaveChangesAsync(cancellationToken);
 
-        devEnvironment = await dbContext.Environments
-            .Where(e => e.EnvironmentName == "Dev")
-            .FirstOrDefaultAsync(cancellationToken);
-
-        devEnvironment2 = await dbContext.Environments
-            .Where(e => e.EnvironmentName == "Dev2")
-            .FirstOrDefaultAsync(cancellationToken);
-
-        // create two applications
-        var application1 = new Application
-        {
-            ApplicationName = "Test Application 1",
-            ProjectID = 1
-        };
-
-        var application2 = new Application
-        {
-            ApplicationName = "Test Application 2",
-            ProjectID = 1
-        };
-
-        dbContext.Applications.Add(application1);
-        dbContext.Applications.Add(application2);
-
+        var application1 = new Application { ApplicationName = "Authorization", Project = project1 };
+        var application2 = new Application { ApplicationName = "NextJs UI/API", Project = project1 };
+        await dbContext.Applications.AddRangeAsync(application1, application2);
         await dbContext.SaveChangesAsync(cancellationToken);
 
+        var projectOneApps = new Application[] { application1, application2 };
+        var projectOneEnvs = new Environment[] { devEnvironment, devEnvironment2, devEnvironment3 };
 
-        application1 = await dbContext.Applications
-            .Where(a => a.ApplicationName == "Test Application 1")
-            .FirstOrDefaultAsync(cancellationToken);
-
-        application2 = await dbContext.Applications
-            .Where(a => a.ApplicationName == "Test Application 2")
-            .FirstOrDefaultAsync(cancellationToken);
-
-
-
-
-        // create two scaling configurations
-
-        var scalingConfiguration1 = new ScalingConfiguration
+        foreach (var project in projectOneApps)
         {
-            ApplicationID = application1?.ApplicationID ?? 1,
-            EnvironmentID = devEnvironment?.EnvironmentID ?? 1,
-            NumberOfInstances = 2,
-        };
-        
+            foreach (var env in projectOneEnvs)
+            {
+                var scalingConfig = new ScalingConfiguration
+                {
+                    Application = project,
+                    Environment = env,
+                    NumberOfInstances = new Random().Next(1, 10),
+                };
+                dbContext.ScalingConfigurations.Add(scalingConfig);
+            }
+        }
 
-        var scalingConfiguration2 = new ScalingConfiguration
+        await dbContext.SaveChangesAsync(cancellationToken);
+    }
+
+
+    private async Task SeedProjectTwo(ScalingDbContext dbContext, CancellationToken cancellationToken)
+    {
+        var project = new Project { ProjectName = "MendMind" };
+        await dbContext.Projects.AddAsync(project);
+        await dbContext.SaveChangesAsync(cancellationToken);
+
+        // Log the project to see if saving it made any changes to the project object 
+        _logger.LogInformation("Project ID after db save: {ProjectID}", project.ProjectID);
+
+        var devEnvironment = new Environment { EnvironmentName = "Dev", Project = project};
+        var qaEnvironment = new Environment { EnvironmentName = "QA", Project = project };
+        await dbContext.Environments.AddRangeAsync(devEnvironment, qaEnvironment);
+        await dbContext.SaveChangesAsync(cancellationToken);
+
+        var authorizationMicroservice = new Application
         {
-            ApplicationID = application2?.ApplicationID ?? 2,
-            EnvironmentID = devEnvironment2?.EnvironmentID ?? 2,
-            NumberOfInstances = 3,
+            ApplicationName = "Authorization Microservice",
+            Project = project
         };
 
+        var dailyStatusMicroservice = new Application
+        {
+            ApplicationName = "Daily Status MicroService",
+            Project = project
+        };
 
-        dbContext.ScalingConfigurations.AddRange(scalingConfiguration1, scalingConfiguration2);
+        var journalingMicroservice = new Application
+        {
+            ApplicationName = "Journaling Microservice",
+            Project = project
+        };
+
+        var moodTrackingMicroservice = new Application
+        {
+            ApplicationName = "Mood Tracking Microservice",
+            Project = project
+        };
+
+        var excelFileGenerationMicroservice = new Application
+        {
+            ApplicationName = "Excel File Generation Microservice",
+            Project = project
+        };
+
+        await dbContext.Applications.AddRangeAsync(authorizationMicroservice, dailyStatusMicroservice, journalingMicroservice, moodTrackingMicroservice, excelFileGenerationMicroservice);
+        await dbContext.SaveChangesAsync(cancellationToken);
+
+        var projectApps = new Application[] { authorizationMicroservice, dailyStatusMicroservice, journalingMicroservice, moodTrackingMicroservice, excelFileGenerationMicroservice };
+        var projectEnvs = new Environment[] { devEnvironment, qaEnvironment };
+
+        foreach (var app in projectApps)
+        {
+            foreach (var env in projectEnvs)
+            {
+                var scalingConfig = new ScalingConfiguration
+                {
+                    Application = app,
+                    Environment= env,
+                    NumberOfInstances = new Random().Next(1, 10),
+                };
+                dbContext.ScalingConfigurations.Add(scalingConfig);
+            }
+        }
 
         await dbContext.SaveChangesAsync(cancellationToken);
     }

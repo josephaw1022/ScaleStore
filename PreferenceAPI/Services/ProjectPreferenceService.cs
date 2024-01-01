@@ -1,7 +1,10 @@
-﻿using MongoDB.Bson;
+﻿using Microsoft.Extensions.Caching.Distributed;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using PreferenceDTO;
+using System.Text.Json;
 using System.Text.Json.Serialization;
+
 
 namespace PreferenceAPI.Services;
 
@@ -10,14 +13,16 @@ public class ProjectPreferenceService
     private readonly IMongoCollection<ProjectPreferenceCollection> _projectPreferencesCollection;
     private readonly ILogger<ProjectPreferenceService> _logger;
     private readonly ServiceScalingHttpApiService _serviceScalingHttpClient;
+    private readonly IDistributedCache _distributedCache;
 
 
-    public ProjectPreferenceService(IMongoClient mongoClient, ILogger<ProjectPreferenceService> logger, ServiceScalingHttpApiService serviceScalingHttpClient)
+    public ProjectPreferenceService(IMongoClient mongoClient, ILogger<ProjectPreferenceService> logger, ServiceScalingHttpApiService serviceScalingHttpClient, IDistributedCache cache)
     {
         _projectPreferencesCollection = mongoClient.GetDatabase("preference")
                                                    .GetCollection<ProjectPreferenceCollection>("projectpreferences");
         _logger = logger;
         _serviceScalingHttpClient = serviceScalingHttpClient;
+        _distributedCache = cache;
     }
 
     public async Task<IProjectPreference> GetProjectPreferenceAsync(int userId)
@@ -91,7 +96,7 @@ public class ProjectPreferenceService
 
             return true;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             // TODO: Log the exception
             return false;

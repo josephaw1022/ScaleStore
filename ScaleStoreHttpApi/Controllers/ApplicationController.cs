@@ -2,13 +2,15 @@
 using MediatR;
 using ScaleStoreHttpApi.Requests;
 using ServiceScalingDTO;
+using Microsoft.AspNetCore.OutputCaching;
 
 
 namespace ScaleStoreHttpApi.Controllers;
 
 
-[Route("api/[controller]")]
 [ApiController]
+[Route("api/[controller]")]
+[OutputCache(Duration = 15)]
 public class ApplicationController : ControllerBase
 {
     private readonly IMediator _mediator;

@@ -1,4 +1,5 @@
 ﻿using ServiceScalingCore;
+using System.Net.Http;
 
 namespace ScaleStoreWebUI.Services;
 
@@ -25,7 +26,8 @@ public class ScaleStoreApiService(HttpClient httpClient)
         return await httpClient.GetFromJsonAsync<List<ScalingConfigurationTableRow>>($"api/ScalingConfiguration?projectId={projectId}");
     }
 
-
+    public async Task<List<ProjectName>> GetListOfProjectNames(int userId) =>
+        await httpClient.GetFromJsonAsync<List<ProjectName>>($"api/Projects?userId={userId}") ?? new List<ProjectName>();
 }
 
 
@@ -46,10 +48,10 @@ public class EnvironmentTableRow : IGetManyEnvironmentsResponse
 
     public string EnvironmentName { get; set; } = null!;
 
-    
+
     public string ProjectName { get; set; } = null!;
 
- }
+}
 
 
 public class ApplicationTableRow : IApplicationsGetManyResponse
@@ -77,4 +79,13 @@ public class ScalingConfigurationTableRow : IGetScalingConfigurationResponse
     public string EnvironmentName { get; set; } = null!;
 
     public string ProjectName { get; set; } = null!;
+}
+
+
+
+public class ProjectName : IProjectGetManyNamesResponseItem
+{
+    public string Name { get; set; } = null!;
+
+    public int Id { get; set; }
 }

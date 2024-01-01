@@ -6,6 +6,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.AddServiceDefaults();
 
 builder.AddRedisOutputCache("scalestore-cache");
+builder.AddRedisDistributedCache("scalestore-cache");
+builder.AddRedis("scalestore-cache");
+
+
 builder.AddNpgsqlDbContext<ScalingDbContext>("scalestore");
 
 builder.Services.AddControllers();

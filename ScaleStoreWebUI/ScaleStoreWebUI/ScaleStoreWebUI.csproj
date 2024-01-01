@@ -13,6 +13,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\KEDAScalingUI.ServiceDefaults\KEDAScalingUI.ServiceDefaults.csproj" />
+		<ProjectReference Include="..\..\PreferenceDTO\PreferenceDTO.csproj" />
 		<ProjectReference Include="..\..\ServiceScalingCore\ServiceScalingCore.csproj" />
 		<ProjectReference Include="..\..\ServiceScalingDTO\ServiceScalingDTO.csproj" />
 		<ProjectReference Include="..\ScaleStoreWebUI.Client\ScaleStoreWebUI.Client.csproj" />

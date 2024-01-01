@@ -1,20 +1,21 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PreferenceAPI.Services;
 using PreferenceDTO;
+using Microsoft.AspNetCore.OutputCaching;
 
 namespace PreferenceAPI.Controllers;
 
-[Route("api/[controller]")]
 [ApiController]
+[Route("api/[controller]")]
 public class ProjectPreferenceController(ProjectPreferenceService projectPreferenceService) : ControllerBase
 {
     [HttpGet("{userId:int}")]
+    [OutputCache(Duration =15)]
     public async Task<ActionResult<IProjectPreference>> GetProjectPreference(int userId)
     {
         var projectPreference = await projectPreferenceService.GetProjectPreferenceAsync(userId);
 
         return Ok(projectPreference);
-
     }
 
     [HttpPut("{projectId:int}/{userId:int}")]

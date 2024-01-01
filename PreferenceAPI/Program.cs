@@ -7,6 +7,11 @@ builder.AddServiceDefaults();
 // Add MongoDB support
 builder.AddMongoDBClient("preference");
 
+
+// Add Redis support
+builder.AddRedisOutputCache("preference-cache");
+builder.AddRedisDistributedCache("preference-cache");
+
 // Add services to the container.
 
 builder.Services.AddControllers();

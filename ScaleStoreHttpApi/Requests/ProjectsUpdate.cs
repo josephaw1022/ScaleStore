@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using ServiceScalingDb.ScalingDb;
 using ServiceScalingCore;
+using Microsoft.Extensions.Caching.Distributed;
 
 namespace ScaleStoreHttpApi.Requests
 {
@@ -33,9 +34,12 @@ namespace ScaleStoreHttpApi.Requests
     {
         private readonly ScalingDbContext dbContext;
 
-        public UpdateProjectRequestHandler(ScalingDbContext dbContext)
+        private readonly IDistributedCache cache;
+
+        public UpdateProjectRequestHandler(ScalingDbContext dbContext, IDistributedCache cache)
         {
             this.dbContext = dbContext;
+            this.cache = cache;
         }
 
         public async Task<UpdateProjectResponse> Handle(UpdateProjectRequest request, CancellationToken cancellationToken)
@@ -53,6 +57,11 @@ namespace ScaleStoreHttpApi.Requests
                     Name = name,
                     IsSuccess = false
                 };
+
+                // Right here I want to clear all of the cache keys that include project in them
+
+
+
             }
 
             project.ProjectName = name;

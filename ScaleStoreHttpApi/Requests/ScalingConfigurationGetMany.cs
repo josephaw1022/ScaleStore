@@ -45,6 +45,7 @@ namespace ScaleStoreHttpApi.Requests
             var scalingConfigurations = await dbContext.ScalingConfigurations
              .Include(sc => sc.Application)
              .Include(sc => sc.Environment)
+             .Where(sc => sc.Application.ProjectID == request.ProjectID)
              .Select(sc => new ScalingConfigurationsTableViewResponse
                 {
                  Id = sc.ScalingID,
@@ -52,6 +53,7 @@ namespace ScaleStoreHttpApi.Requests
                  EnvironmentName = sc.Environment.EnvironmentName,
                  NumberOfInstances = sc.NumberOfInstances
                 })
+             .OrderBy(sc => sc.EnvironmentName)
              .ToListAsync();
 
 

@@ -18,12 +18,15 @@ var scaleStoreHttpApi = builder.AddProject<Projects.ServiceScalingWebApi>("scale
 
 
 // Preference Service
+var preferenceCache = builder.AddRedisContainer("preference-cache", 6380);
+
 var preferenceDb = builder.AddMongoDBContainer("preference-db", 27017)
     .AddDatabase("preference");
 
 var preferenceHttpApi = builder.AddProject<Projects.PreferenceAPI>("preferenceapi")
                            .WithReference(preferenceDb)
-                           .WithReference(scaleStoreHttpApi);
+                           .WithReference(scaleStoreHttpApi)
+                           .WithReference(preferenceCache);
 
 // web ui
 builder.AddProject<Projects.ScaleStoreWebUI>("scalestorewebui")

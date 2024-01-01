@@ -2,11 +2,14 @@
 using Microsoft.AspNetCore.Mvc;
 using ScaleStoreHttpApi.Requests;
 using ServiceScalingDTO;
+using Microsoft.AspNetCore.OutputCaching;
+
 
 namespace ScaleStoreHttpApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[OutputCache(Duration = 15)]
 public class ScalingConfigurationController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -16,7 +19,6 @@ public class ScalingConfigurationController : ControllerBase
         _mediator = mediator;
     }
 
-    // GET: scalingconfiguration/5
     [HttpGet("{id}")]
     public async Task<IActionResult> Get(int id)
     {
@@ -25,7 +27,6 @@ public class ScalingConfigurationController : ControllerBase
         return Ok(response);
     }
 
-    // GET: scalingconfiguration
     [HttpGet]
     public async Task<IActionResult> GetAll(int projectId)
     {
@@ -33,7 +34,6 @@ public class ScalingConfigurationController : ControllerBase
         return Ok(response);
     }
 
-    // POST: scalingconfiguration
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateScalingConfigurationDTO requestBody)
     {
@@ -49,7 +49,6 @@ public class ScalingConfigurationController : ControllerBase
         return CreatedAtAction(nameof(Get), new { id = response.ScalingID }, response);
     }
 
-    // PUT: scalingconfiguration/5
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, [FromBody]  UpdateScalingConfigurationDTO requestBody)
     {

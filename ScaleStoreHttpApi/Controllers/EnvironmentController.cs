@@ -1,13 +1,14 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OutputCaching;
 using ScaleStoreHttpApi.Requests;
 using ServiceScalingDTO;
 
 namespace ScaleStoreHttpApi.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
+    [OutputCache(Duration =15)]
     public class EnvironmentController : ControllerBase
     {
 

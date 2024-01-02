@@ -1,55 +1,24 @@
 ﻿@using PreferenceDTO
-@using System.Text.Json;
-@inject ProjectPreferenceApiService projectPreferenceApiService
-@inject ScaleStoreApiService scaleStoreApiService
+@using Microsoft.AspNetCore.Components.Server.Circuits
+@inject ProjectPreferenceStateService projectPreferenceStateService
 @inject ILogger<TopRow> logger
-
-
-
 @code {
 
-
     bool initialRequestLoading = true;
-
-    private ProjectPreference projectPreferenceApiResponse = null!;
     private List<ProjectName> listOfProjects = null!;
     private ProjectName selectedProject = new();
 
     protected override async Task OnInitializedAsync()
     {
-        projectPreferenceApiResponse = await projectPreferenceApiService.GetProjectPreference(1) ?? new();
+        var projectPreference = await projectPreferenceStateService.GetProjectPreference(1,"abc");
+
         initialRequestLoading = false;
 
-        var projectPreferenceJson = JsonSerializer.Serialize(projectPreferenceApiResponse, new JsonSerializerOptions { WriteIndented = true });
-        logger.LogInformation("ProjectPreference: {ProjectPreferenceJson}", projectPreferenceJson);
+        selectedProject = projectPreference;
 
-
-        listOfProjects = await scaleStoreApiService.GetListOfProjectNames(1) ?? new List<ProjectName>();
-
-        var listOfProjectsJson = JsonSerializer.Serialize(listOfProjects, new JsonSerializerOptions { WriteIndented = true });
-        logger.LogInformation("ListOfProjects: {ListOfProjectsJson}", listOfProjectsJson);
-
-
-        // Iterate through the list of projects and find the one that matches the projectPreference
-        // If found, set the selectedProject to that project
-
-        // If not found, set the selectedProject to the first project in the list
-
-        foreach (var project in listOfProjects)
-        {
-            if (project.Id != projectPreferenceApiResponse.ProjectId)
-            {
-                continue;
-            }
-
-            // Found the project that matches the projectPreference
-            selectedProject = project;
-            break;
-        }
-
-
+        listOfProjects = await projectPreferenceStateService.GetProjectNames(1);
     }
-
+    
 }
 
 
@@ -73,6 +42,6 @@
             </select>
         }
 
-
+      
     </div>
 </div>

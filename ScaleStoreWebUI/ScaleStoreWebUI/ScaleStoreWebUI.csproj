@@ -17,6 +17,7 @@
 		<ProjectReference Include="..\..\ServiceScalingCore\ServiceScalingCore.csproj" />
 		<ProjectReference Include="..\..\ServiceScalingDTO\ServiceScalingDTO.csproj" />
 		<ProjectReference Include="..\ScaleStoreWebUI.Client\ScaleStoreWebUI.Client.csproj" />
+		<PackageReference Include="Aspire.StackExchange.Redis.DistributedCaching" Version="8.0.0-preview.2.23619.3" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.0" />
 	</ItemGroup>
 

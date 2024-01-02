@@ -32,7 +32,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Preference", "Preference", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PreferenceAPI", "PreferenceAPI\PreferenceAPI.csproj", "{E5A8B84F-2CF3-4665-B219-6F544C21D171}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PreferenceDTO", "PreferenceDTO\PreferenceDTO.csproj", "{FEB6BB82-3EEC-4E33-BED3-E025D2B97CFC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PreferenceDTO", "PreferenceDTO\PreferenceDTO.csproj", "{FEB6BB82-3EEC-4E33-BED3-E025D2B97CFC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

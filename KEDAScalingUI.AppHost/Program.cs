@@ -29,8 +29,12 @@ var preferenceHttpApi = builder.AddProject<Projects.PreferenceAPI>("preferenceap
                            .WithReference(preferenceCache);
 
 // web ui
+var scaleStoreWebUiStateStore = builder.AddRedisContainer("scalestore-webui-statestore", 6381);
+
 builder.AddProject<Projects.ScaleStoreWebUI>("scalestorewebui")
     .WithReference(scaleStoreHttpApi)
-    .WithReference(preferenceHttpApi);
+    .WithReference(preferenceHttpApi)
+    .WithReference(scaleStoreWebUiStateStore);
+
 
 builder.Build().Run();

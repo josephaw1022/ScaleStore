@@ -1,0 +1,18 @@
+﻿@page "/view-circuit"
+@using ScaleStoreWebUI.StateManagement
+@inject CircuitService CircuitService
+@code {
+
+    private string ConnectionId
+    {
+        get
+        {
+            return CircuitService.CircuitId;
+        }
+
+    }
+}
+
+<h1>
+    Connection ID: @ConnectionId
+</h1>

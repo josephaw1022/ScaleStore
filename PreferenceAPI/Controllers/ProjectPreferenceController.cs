@@ -25,7 +25,11 @@ public class ProjectPreferenceController(ProjectPreferenceService projectPrefere
 
         if (result)
         {
-            return Results.Ok("Project preference updated successfully.");
+            return Results.Ok(new
+            {
+                success = true,
+                message = "Project preference updated successfully."
+            });
         }
 
         return Results.BadRequest("Unable to update project preference.");

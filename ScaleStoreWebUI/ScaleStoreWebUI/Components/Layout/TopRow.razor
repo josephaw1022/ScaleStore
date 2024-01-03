@@ -1,56 +1,8 @@
 ﻿@using PreferenceDTO
 @using System.Text.Json;
-@inject ProjectPreferenceApiService projectPreferenceApiService
-@inject ScaleStoreApiService scaleStoreApiService
-@inject ILogger<TopRow> logger
-
-
-
-@code {
-
-
-    bool initialRequestLoading = true;
-
-    private ProjectPreference projectPreferenceApiResponse = null!;
-    private List<ProjectName> listOfProjects = null!;
-    private ProjectName selectedProject = new();
-
-    protected override async Task OnInitializedAsync()
-    {
-        projectPreferenceApiResponse = await projectPreferenceApiService.GetProjectPreference(1) ?? new();
-        initialRequestLoading = false;
-
-        var projectPreferenceJson = JsonSerializer.Serialize(projectPreferenceApiResponse, new JsonSerializerOptions { WriteIndented = true });
-        logger.LogInformation("ProjectPreference: {ProjectPreferenceJson}", projectPreferenceJson);
-
-
-        listOfProjects = await scaleStoreApiService.GetListOfProjectNames(1) ?? new List<ProjectName>();
-
-        var listOfProjectsJson = JsonSerializer.Serialize(listOfProjects, new JsonSerializerOptions { WriteIndented = true });
-        logger.LogInformation("ListOfProjects: {ListOfProjectsJson}", listOfProjectsJson);
-
-
-        // Iterate through the list of projects and find the one that matches the projectPreference
-        // If found, set the selectedProject to that project
-
-        // If not found, set the selectedProject to the first project in the list
-
-        foreach (var project in listOfProjects)
-        {
-            if (project.Id != projectPreferenceApiResponse.ProjectId)
-            {
-                continue;
-            }
-
-            // Found the project that matches the projectPreference
-            selectedProject = project;
-            break;
-        }
-
-
-    }
-
-}
+@inject ProjectPreferenceApiService ProjectPreferenceApiService
+@inject ScaleStoreApiService ScaleStoreApiService
+@inject ILogger<TopRow> Logger
 
 
 
@@ -59,20 +11,91 @@
         <h5 class="text-primary">Select a Project</h5>
         <p>Select from the list to view project details:</p>
 
-        @if (initialRequestLoading)
+        @if (InitialRequestLoading)
         {
             <p><em>Loading...</em></p>
         }
         else
         {
-            <select class="form-select" @bind="selectedProject.Id">
-                @foreach (var project in listOfProjects)
+            <InputSelect @bind-Value="FormModel.ProjectId" class="form-select">
+                @if (ListOfProjects.Count > 0)
                 {
-                    <option value="@project.Id">@project.Name</option>
+                    @foreach (var project in ListOfProjects)
+                    {
+                        <option value="@project.Id">@project.Name</option>
+                    }
                 }
-            </select>
+            </InputSelect>
+            <button @onclick="ProjectSelectionChange" class="btn btn-primary btn-sm mt-3">Select</button>
         }
-
-
     </div>
 </div>
+
+@code {
+    bool InitialRequestLoading = true;
+    private ProjectPreference ProjectPreferenceApiResponse = new();
+    private List<ProjectName> ListOfProjects = new();
+    private ProjectPreferenceForm FormModel = new();
+
+
+    private bool IsNewProjectPreferenceSelected()
+    {
+        return ProjectPreferenceApiResponse.ProjectId != FormModel.ProjectId;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await GetProjectSelection();
+    }
+
+    private async Task GetProjectSelection()
+    {
+        ProjectPreferenceApiResponse = await ProjectPreferenceApiService.GetProjectPreference(1) ?? new();
+        InitialRequestLoading = false;
+
+        Logger.LogInformation("ProjectPreferenceApiResponse: {0}", JsonSerializer.Serialize(ProjectPreferenceApiResponse));
+
+        ListOfProjects = await ScaleStoreApiService.GetListOfProjectNames(1) ?? new List<ProjectName>();
+
+        foreach (var project in ListOfProjects)
+        {
+            if (project.Id == ProjectPreferenceApiResponse.ProjectId)
+            {
+                FormModel.ProjectId = project.Id;
+                break;
+            }
+        }
+    }
+
+    private async Task ProjectSelectionChange()
+    {
+        Logger.LogInformation("Now in ProjectSelectionChange & SelectedProjectId: {0}", FormModel.ProjectId);
+
+        var apiResponse = await ProjectPreferenceApiService.UpdateProjectPreference(FormModel.ProjectId, 1);
+
+        Logger.LogInformation("ProjectPreferenceApiResponse: {0}", apiResponse);
+
+        if (string.IsNullOrEmpty(apiResponse))
+        {
+            Logger.LogError("Failed to update project preference");
+            return;
+        }
+
+        Logger.LogInformation("Project preference updated successfully");
+
+        await GetProjectSelection();
+    }
+
+    class ProjectPreferenceForm
+    {
+        public int ProjectId { get; set; }
+    }
+
+
+
+    private void handleClickMe()
+    {
+        Logger.LogInformation("handleClickMe");
+    }
+}
+

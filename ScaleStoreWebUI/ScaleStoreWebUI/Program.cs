@@ -7,6 +7,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.AddServiceDefaults();
 
 
+
+
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents()
@@ -16,6 +18,8 @@ builder.Services.AddHttpClient<ProjectPreferenceApiService>(client => client.Bas
 builder.Services.AddHttpClient<ScaleStoreApiService>(client => client.BaseAddress = new("http://scalestore-webapi"));
 
 var app = builder.Build();
+
+
 
 app.MapDefaultEndpoints();
 

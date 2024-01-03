@@ -1,10 +1,10 @@
 ﻿.top-row {
     background-color: #f7f7f7;
     border-bottom: 1px solid #d6d5d5;
-    justify-content: center;
+    justify-content: end;
     flex-direction: row;
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     padding: 0 1rem;
 }
 
@@ -12,9 +12,9 @@
 .top-row-items { 
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: end;
     justify-content: flex-end;
-    width: 80%;
+    width: 40%;
     padding: 0 40px;
 }
 

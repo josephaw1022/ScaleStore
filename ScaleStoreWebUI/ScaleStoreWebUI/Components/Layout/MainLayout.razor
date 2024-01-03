@@ -2,11 +2,11 @@
 
 <div class="page">
     <div class="sidebar">
-        <NavMenu />
+        <NavMenu @rendermode="InteractiveServer" />
     </div>
 
     <main>
-      <TopRow /> 
+        <TopRow @rendermode="InteractiveServer" />
         <article class="content px-4">
             @Body
         </article>

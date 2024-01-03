@@ -8,6 +8,11 @@ builder.AddServiceDefaults();
 builder.AddMongoDBClient("preference");
 
 
+builder.Services.AddHttpLogging(o =>
+{
+    
+});
+
 // Add Redis support
 builder.AddRedisOutputCache("preference-cache");
 builder.AddRedisDistributedCache("preference-cache");
@@ -26,6 +31,8 @@ builder.Services.AddHttpClient<ServiceScalingHttpApiService>(client => client.Ba
 builder.Services.AddScoped<ProjectPreferenceService>();
 
 var app = builder.Build();
+
+app.UseHttpLogging();
 
 app.MapDefaultEndpoints();
 

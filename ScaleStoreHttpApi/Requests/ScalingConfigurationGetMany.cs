@@ -10,9 +10,12 @@ namespace ScaleStoreHttpApi.Requests
     {
         public int ProjectID { get; set; }
 
-        public GetManyScalingConfigurationsRequest(int projectID)
+        public int ApplicationId { get; set; }
+
+        public GetManyScalingConfigurationsRequest(int projectID, int applicationId)
         {
             ProjectID = projectID;
+            ApplicationId = applicationId;
         }
     }
 
@@ -25,7 +28,6 @@ namespace ScaleStoreHttpApi.Requests
         public string ApplicationName { get; set; } = null!;
 
         public string EnvironmentName { get; set; } = null!;
-
 
         public int NumberOfInstances { get; set; } = default!;
 
@@ -42,20 +44,29 @@ namespace ScaleStoreHttpApi.Requests
 
         public async Task<List<ScalingConfigurationsTableViewResponse>> Handle(GetManyScalingConfigurationsRequest request, CancellationToken cancellationToken)
         {
-            var scalingConfigurations = await dbContext.ScalingConfigurations
-             .Include(sc => sc.Application)
-             .Include(sc => sc.Environment)
-             .Where(sc => sc.Application.ProjectID == request.ProjectID)
-             .Select(sc => new ScalingConfigurationsTableViewResponse
-                {
-                 Id = sc.ScalingID,
-                 ApplicationName = sc.Application.ApplicationName,
-                 EnvironmentName = sc.Environment.EnvironmentName,
-                 NumberOfInstances = sc.NumberOfInstances
-                })
-             .OrderBy(sc => sc.EnvironmentName)
-             .ToListAsync();
+            // Start the query
+            var query = dbContext.ScalingConfigurations
+                .Include(sc => sc.Application)
+                .Include(sc => sc.Environment)
+                .Where(sc => sc.Application.ProjectID == request.ProjectID);
 
+            // Conditionally add the ApplicationID filter
+            if (request.ApplicationId != 0)
+            {
+                query = query.Where(sc => sc.Application.ApplicationID == request.ApplicationId);
+            }
+
+            // Continue building the query and execute it
+            var scalingConfigurations = await query
+                .Select(sc => new ScalingConfigurationsTableViewResponse
+                {
+                    Id = sc.ScalingID,
+                    ApplicationName = sc.Application.ApplicationName,
+                    EnvironmentName = sc.Environment.EnvironmentName,
+                    NumberOfInstances = sc.NumberOfInstances
+                })
+                .OrderBy(sc => sc.EnvironmentName)
+                .ToListAsync();
 
             return scalingConfigurations;
         }

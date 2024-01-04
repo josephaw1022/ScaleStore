@@ -1,12 +1,13 @@
 ﻿@page "/environments"
-@inject ScaleStoreApiService httpService
-@inject ILogger<EnvironmentList> logger
+@inject ScaleStoreApiService ScaleStoreApiService
+@inject ProjectPreferenceApiService ProjectPreferenceApiService
+@inject ILogger<EnvironmentList> Logger
 @attribute [StreamRendering(true)]
 
 
 <h3>Environments</h3>
 
-@if (environments is null)
+@if (Environments is null)
 {
     <p><em>Loading...</em></p>
 }
@@ -24,29 +25,39 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (var environment in environments)
+
+            @if (Environments is not null)
             {
-                <tr>
-                    <td>@environment.EnvironmentName</td>
-                    <td>
-                        @environment.ProjectName
-                    </td>
-                </tr>
+                @foreach (var environment in Environments)
+                {
+                    <tr>
+                        <td>@environment.EnvironmentName</td>
+                        <td>
+                            @environment.ProjectName
+                        </td>
+                    </tr>
+                }
             }
         </tbody>
     </table>
 }
 
 @code {
-
-
-    private List<EnvironmentTableRow>? environments = null;
-
+    List<EnvironmentTableRow>? Environments = null;
+    int ProjectId;
 
     protected override async Task OnInitializedAsync()
     {
-        environments = await httpService.GetEnvironments(1);
-        logger.LogDebug("Environments: {0}", environments);
+        await InitializeData();
+    }
 
+    async Task InitializeData()
+    {
+        var projectPreference = await ProjectPreferenceApiService.GetProjectPreference(1);
+        ProjectId = projectPreference.ProjectId;
+
+
+        Environments = await ScaleStoreApiService.GetEnvironments(ProjectId);
+        Logger.LogDebug("Environments: {0}", Environments);
     }
 }

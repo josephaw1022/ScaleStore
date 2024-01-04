@@ -1,7 +1,8 @@
 ﻿@page "/applications"
-@inject ScaleStoreApiService httpService
-@inject ILogger<Application> logger
-@inject NavigationManager navigation 
+@inject ScaleStoreApiService ScaleStoreApiService
+@inject ProjectPreferenceApiService ProjectPreferenceApiService
+@inject ILogger<Application> Logger
+@inject NavigationManager NavigationManager
 @attribute [StreamRendering(true)]
 
 
@@ -11,7 +12,7 @@
     Create
 </NavLink>
 
-@if (applications is null)
+@if (Applications is null)
 {
     <p><em>Loading...</em></p>
 }
@@ -25,7 +26,7 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (var application in applications)
+            @foreach (var application in Applications)
             {
                 <tr>
                     <td>@application.Name</td>
@@ -37,23 +38,23 @@ else
 }
 
 @code {
-    private List<ApplicationTableRow>? applications = null;
-    private int projectId = 1;
+    List<ApplicationTableRow>? Applications = null;
+    int ProjectId = 0;
 
     protected override async Task OnInitializedAsync()
     {
-        applications = await httpService.GetApplications(projectId);
-        logger.LogDebug("Applications: {0}", applications);
+        await InitializeDataInPage();
     }
 
-    private void EditApplication(int applicationId)
+
+
+    async Task InitializeDataInPage()
     {
-        // Navigate to edit application page
+        var projectPreference = await ProjectPreferenceApiService.GetProjectPreference(1);
+        ProjectId = projectPreference.ProjectId;
+
+        Applications = await ScaleStoreApiService.GetApplications(ProjectId);
+        Logger.LogDebug("Applications: {0}", Applications);
     }
 
-    private void DeleteApplication(int applicationId)
-    {
-        // Confirm and delete application
-    }
-   
-    }
+}

@@ -25,6 +25,7 @@
                 <tr>
                     <th>Application Name</th>
                     <th>Number of Instances</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -33,6 +34,10 @@
                     <tr>
                         <td>@row.ApplicationName</td>
                         <td>@row.NumberOfInstances</td>
+                        <td>
+                            <button class="btn btn-danger btn-small"> - </button>
+                            <button class="btn btn-success btn-small"> + </button>
+                        </td>
                     </tr>
                 }
             </tbody>

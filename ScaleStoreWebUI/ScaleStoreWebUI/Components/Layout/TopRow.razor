@@ -2,6 +2,7 @@
 @using System.Text.Json;
 @inject ProjectPreferenceApiService ProjectPreferenceApiService
 @inject ScaleStoreApiService ScaleStoreApiService
+@inject NavigationManager NavigationManager
 @inject ILogger<TopRow> Logger
 
 
@@ -83,19 +84,13 @@
 
         Logger.LogInformation("Project preference updated successfully");
 
-        await GetProjectSelection();
+        NavigationManager.Refresh(forceReload: true);
+
     }
 
     class ProjectPreferenceForm
     {
         public int ProjectId { get; set; }
-    }
-
-
-
-    private void handleClickMe()
-    {
-        Logger.LogInformation("handleClickMe");
     }
 }
 

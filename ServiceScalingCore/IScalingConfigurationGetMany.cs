@@ -7,6 +7,8 @@ namespace ServiceScalingCore
     public interface IGetManyScalingConfigurationsRequest
     {
         int ProjectID { get; set; }
+
+        int ApplicationId { get; set; }
     }
 
 

@@ -61,7 +61,7 @@ internal sealed class ScalingDbInitializer : BackgroundService
         await dbContext.Projects.AddAsync(project1);
         await dbContext.SaveChangesAsync(cancellationToken);
 
-        var devEnvironment = new Environment { EnvironmentName = "DevSite1", Project = project1};
+        var devEnvironment = new Environment { EnvironmentName = "DevSite1", Project = project1 };
         var devEnvironment2 = new Environment { EnvironmentName = "DevSite2", Project = project1 };
         var devEnvironment3 = new Environment { EnvironmentName = "DevSite3", Project = project1 };
 
@@ -103,9 +103,23 @@ internal sealed class ScalingDbInitializer : BackgroundService
         // Log the project to see if saving it made any changes to the project object 
         _logger.LogInformation("Project ID after db save: {ProjectID}", project.ProjectID);
 
-        var devEnvironment = new Environment { EnvironmentName = "Dev", Project = project};
+        var devEnvironment = new Environment { EnvironmentName = "Dev", Project = project };
         var qaEnvironment = new Environment { EnvironmentName = "QA", Project = project };
-        await dbContext.Environments.AddRangeAsync(devEnvironment, qaEnvironment);
+        var prodEnvironment = new Environment { EnvironmentName = "Prod", Project = project };
+        var devsite1Environment = new Environment { EnvironmentName = "DevSite1", Project = project };
+        var devsite2Environment = new Environment { EnvironmentName = "DevSite2", Project = project };
+        var devsite3Environment = new Environment { EnvironmentName = "DevSite3", Project = project };
+        var devsite4Environment = new Environment { EnvironmentName = "DevSite4", Project = project };
+        var devsite5Environment = new Environment { EnvironmentName = "DevSite5", Project = project };
+        var devsite6Environment = new Environment { EnvironmentName = "DevSite6", Project = project };
+        var devsite7Environment = new Environment { EnvironmentName = "DevSite7", Project = project };
+        var devsite8Environment = new Environment { EnvironmentName = "DevSite8", Project = project };
+        var devsite9Environment = new Environment { EnvironmentName = "DevSite9", Project = project };
+        var devsite10Environment = new Environment { EnvironmentName = "DevSite10", Project = project };
+
+
+
+        await dbContext.Environments.AddRangeAsync(devEnvironment, qaEnvironment, prodEnvironment, devsite1Environment, devsite2Environment, devsite3Environment, devsite4Environment, devsite5Environment, devsite6Environment, devsite7Environment, devsite8Environment, devsite9Environment, devsite10Environment);
         await dbContext.SaveChangesAsync(cancellationToken);
 
         var authorizationMicroservice = new Application
@@ -142,7 +156,7 @@ internal sealed class ScalingDbInitializer : BackgroundService
         await dbContext.SaveChangesAsync(cancellationToken);
 
         var projectApps = new Application[] { authorizationMicroservice, dailyStatusMicroservice, journalingMicroservice, moodTrackingMicroservice, excelFileGenerationMicroservice };
-        var projectEnvs = new Environment[] { devEnvironment, qaEnvironment };
+        var projectEnvs = new Environment[] { devEnvironment, qaEnvironment, prodEnvironment, devsite1Environment, devsite2Environment, devsite3Environment, devsite4Environment, devsite5Environment, devsite6Environment, devsite7Environment, devsite8Environment, devsite9Environment, devsite10Environment };
 
         foreach (var app in projectApps)
         {
@@ -151,7 +165,7 @@ internal sealed class ScalingDbInitializer : BackgroundService
                 var scalingConfig = new ScalingConfiguration
                 {
                     Application = app,
-                    Environment= env,
+                    Environment = env,
                     NumberOfInstances = new Random().Next(1, 10),
                 };
                 dbContext.ScalingConfigurations.Add(scalingConfig);

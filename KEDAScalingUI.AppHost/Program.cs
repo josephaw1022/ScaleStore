@@ -3,7 +3,7 @@ var builder = DistributedApplication.CreateBuilder(args);
 
 
 // Scaling
-var scalingDb = builder.AddPostgresContainer("scalestore-db", 5433)
+var scalingDb = builder.AddPostgresContainer("scalestore-db", 5433, "JoeMontana3034")
     .AddDatabase("scalestore");
 
 builder.AddProject<Projects.ServiceScalingDb>("scalestore-dbapp")

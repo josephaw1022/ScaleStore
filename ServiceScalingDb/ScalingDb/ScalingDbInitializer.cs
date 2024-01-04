@@ -84,7 +84,7 @@ internal sealed class ScalingDbInitializer : BackgroundService
                 {
                     Application = project,
                     Environment = env,
-                    NumberOfInstances = new Random().Next(1, 10),
+                    NumberOfInstances = new Random().Next(6, 20),
                 };
                 dbContext.ScalingConfigurations.Add(scalingConfig);
             }
@@ -166,7 +166,7 @@ internal sealed class ScalingDbInitializer : BackgroundService
                 {
                     Application = app,
                     Environment = env,
-                    NumberOfInstances = new Random().Next(1, 10),
+                    NumberOfInstances = new Random().Next(6, 20),
                 };
                 dbContext.ScalingConfigurations.Add(scalingConfig);
             }

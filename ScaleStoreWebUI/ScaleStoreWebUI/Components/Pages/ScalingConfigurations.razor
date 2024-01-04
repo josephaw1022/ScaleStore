@@ -1,61 +1,126 @@
 ﻿@page "/scaling-configurations"
-@inject ScaleStoreApiService httpService
-@inject ILogger<ScalingConfigurations> logger
+@inject ScaleStoreApiService ScaleStoreApiService
+@inject ProjectPreferenceApiService ProjectPreferenceApiService
+@inject ILogger<ScalingConfigurations> Logger
 @attribute [StreamRendering(true)]
-
-
 
 <PageTitle>
     Scale Configurations For Project @ProjectId
 </PageTitle>
 
-
 <h3>Scaling Configuration</h3>
 
-<button class="btn btn-primary">
+<button class="btn btn-primary mb-4 ">
     Create
 </button>
 
-@if (scalingConfigurations is null)
+@if (PageData?.ScalingConfigurationTables != null)
 {
-    <p><em>Loading...</em></p>
+    @foreach (var scalingConfigurationTable in PageData.ScalingConfigurationTables)
+    {
+        <h4>@scalingConfigurationTable.EnvironmentName</h4>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Application Name</th>
+                    <th>Number of Instances</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var row in scalingConfigurationTable.ScalingConfigurationList)
+                {
+                    <tr>
+                        <td>@row.ApplicationName</td>
+                        <td>@row.NumberOfInstances</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
 }
 else
 {
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Environment Name</th>
-                <th>Application Name</th>
-                <th>
-                    Number of Instances
-                </th>
-
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var scalingConfiguration in scalingConfigurations)
-            {
-                <tr>
-                    <td>@scalingConfiguration.EnvironmentName</td>
-                    <td>@scalingConfiguration.ApplicationName</td>
-                    <td>@scalingConfiguration.NumberOfInstances</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-
+    <p><em>Loading...</em></p>
 }
 
 @code {
-    private List<ScalingConfigurationTableRow>? scalingConfigurations = null;
-    private int ProjectId = 1;
+    private List<ScalingConfigurationTableRow>? ScalingConfigurationList = null;
+    private int ProjectId;
+    ScalingConfigurationPageData? PageData = null;
 
     protected override async Task OnInitializedAsync()
     {
-        scalingConfigurations = await httpService.GetScalingConfigurations(ProjectId);
-        logger.LogDebug("Scaling Configurations: {0}", scalingConfigurations);
+        await InitializePageData();
+    }
+
+
+
+    async Task InitializePageData()
+    {
+        var projectPreference = await ProjectPreferenceApiService.GetProjectPreference(1);
+        ProjectId = projectPreference.ProjectId;
+
+
+        ScalingConfigurationList = await ScaleStoreApiService.GetScalingConfigurations(ProjectId) ?? new();
+        Logger.LogDebug("Scaling Configurations: {0}", ScalingConfigurationList);
+
+        FormatDataForTables(ScalingConfigurationList);
+    }
+
+    void FormatDataForTables(List<ScalingConfigurationTableRow> tableRows)
+    {
+        // Group the tableRows by EnvironmentName
+        var groupedByEnvironment = tableRows.GroupBy(row => row.EnvironmentName);
+
+        // Create a list of ScalingConfigurationTable
+        var scalingConfigurationTables = new List<ScalingConfigurationTable>();
+
+        foreach (var group in groupedByEnvironment)
+        {
+            // Create a list of TableRow for each group
+            var tableRowsList = group.Select(row => new TableRow
+                {
+                    ApplicationName = row.ApplicationName,
+                    NumberOfInstances = row.NumberOfInstances
+                }).ToList();
+
+            // Add the group to the list of ScalingConfigurationTable
+            scalingConfigurationTables.Add(new ScalingConfigurationTable
+                {
+                    EnvironmentName = group.Key,
+                    ScalingConfigurationList = tableRowsList
+                });
+        }
+
+        // Create the final ScalingConfigurationPageData object
+        var scalingConfigurationPageData = new ScalingConfigurationPageData
+            {
+                ScalingConfigurationTables = scalingConfigurationTables
+            };
+
+
+        PageData = scalingConfigurationPageData;
+
+    }
+
+    public class TableRow
+    {
+        public string ApplicationName { get; set; } = null!;
+        public int NumberOfInstances { get; set; }
+    }
+
+
+    public class ScalingConfigurationTable
+    {
+        public string EnvironmentName { get; set; } = null!;
+
+        public List<TableRow> ScalingConfigurationList { get; set; } = null!;
+    }
+
+    public class ScalingConfigurationPageData
+    {
+        public List<ScalingConfigurationTable> ScalingConfigurationTables { get; set; } = null!;
     }
 
 }

@@ -28,9 +28,9 @@ public class ScalingConfigurationController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAll(int projectId)
+    public async Task<IActionResult> GetAll(int projectId, int applicationId = 0)
     {
-        var response = await _mediator.Send(new GetManyScalingConfigurationsRequest(projectId));
+        var response = await _mediator.Send(new GetManyScalingConfigurationsRequest(projectId, applicationId));
         return Ok(response);
     }
 

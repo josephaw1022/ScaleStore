@@ -1,0 +1,17 @@
+apiVersion: v2
+name: simple-example-poc
+description: A Helm chart for Kubernetes deploying an Nginx application with PostgreSQL backend and KEDA for autoscaling
+
+type: application
+
+version: 0.1.0
+
+appVersion: "1.16.0"
+
+# # Dependencies - other charts that this chart depends on
+# dependencies:
+#   - name: keda
+#     version: "2.9.0" 
+#     repository: "https://kedacore.github.io/charts"
+
+

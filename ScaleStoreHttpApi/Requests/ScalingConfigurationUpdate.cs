@@ -31,8 +31,17 @@ namespace ScaleStoreHttpApi.Requests
                 return null;
             }
 
-            config.ApplicationID = request.ApplicationID;
-            config.EnvironmentID = request.EnvironmentID;
+            if(request.ApplicationID > 0)
+            {
+                config.ApplicationID = request.ApplicationID;
+            }
+
+
+            if(request.EnvironmentID > 0)
+            {
+                config.EnvironmentID = request.EnvironmentID;
+            }
+
             config.NumberOfInstances = request.NumberOfInstances;
 
             await dbContext.SaveChangesAsync(cancellationToken);

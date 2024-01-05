@@ -9,7 +9,6 @@ namespace ScaleStoreHttpApi.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[OutputCache(Duration = 15)]
 public class ScalingConfigurationController : ControllerBase
 {
     private readonly IMediator _mediator;

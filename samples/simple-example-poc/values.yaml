@@ -1,0 +1,25 @@
+# PostgreSQL database configuration
+postgres:
+  image: postgres:latest
+  host: useyourowndbbruh
+  port: 5432
+  dbName: scalestore
+  username: postgres
+  password: JoeMontana3034
+  sslMode: disable
+  service:
+    type: ClusterIP
+    port: 5432
+
+# Nginx deployment configuration
+nginx:
+  image: nginx:latest
+  replicas: 3
+  deploymentName: nginx-deployment
+
+# KEDA ScaledObject configuration
+kedaScaledObject:
+  targetQueryValue: 1
+  applicationName: "Api Gateway"
+  projectName: "PathwayPlus"
+  environmentName: "DevSite1"

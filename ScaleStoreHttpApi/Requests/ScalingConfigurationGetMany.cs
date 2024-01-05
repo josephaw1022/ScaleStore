@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using ServiceScalingCore;
 using ServiceScalingDb.ScalingDb;
+using System.Text.Json;
 
 namespace ScaleStoreHttpApi.Requests
 {
@@ -37,9 +38,12 @@ namespace ScaleStoreHttpApi.Requests
     {
         private readonly ScalingDbContext dbContext;
 
-        public GetManyScalingConfigurationsRequestHandler(ScalingDbContext dbContext)
+        private readonly ILogger<GetManyScalingConfigurationsRequestHandler> logger;
+
+        public GetManyScalingConfigurationsRequestHandler(ScalingDbContext dbContext, ILogger<GetManyScalingConfigurationsRequestHandler> logger)
         {
             this.dbContext = dbContext;
+            this.logger = logger;
         }
 
         public async Task<List<ScalingConfigurationsTableViewResponse>> Handle(GetManyScalingConfigurationsRequest request, CancellationToken cancellationToken)
@@ -51,7 +55,7 @@ namespace ScaleStoreHttpApi.Requests
                 .Where(sc => sc.Application.ProjectID == request.ProjectID);
 
             // Conditionally add the ApplicationID filter
-            if (request.ApplicationId != 0)
+            if (request.ApplicationId > 0)
             {
                 query = query.Where(sc => sc.Application.ApplicationID == request.ApplicationId);
             }

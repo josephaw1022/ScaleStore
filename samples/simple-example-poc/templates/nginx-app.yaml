@@ -1,0 +1,64 @@
+# PostgreSQL Secret
+apiVersion: v1
+kind: Secret
+metadata:
+  name: postgres-db-secret
+type: Opaque
+data:
+  username: {{ .Values.postgres.username | b64enc }}
+  password: {{ .Values.postgres.password | b64enc }}
+
+---
+
+# Nginx Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  labels: 
+    app: {{ .Values.nginx.deploymentName }}
+spec:
+  replicas: {{ .Values.nginx.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Values.nginx.deploymentName }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.nginx.deploymentName }}
+    spec:
+      containers:
+      - name: nginx
+        image: {{ .Values.nginx.image }}
+        ports:
+        - containerPort: 80
+        env:
+        - name: POSTGRES_DB_NAME
+          valueFrom:
+            secretKeyRef:
+              name: postgres-db-secret
+              key: password
+
+---
+
+# KEDA ScaledObject for Nginx
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: nginx-scaledobject
+spec:
+  scaleTargetRef:
+    name: nginx-deployment
+  pollingInterval: 5
+  minReplicaCount: 2
+  triggers:
+  - type: postgresql
+    metadata:
+      targetQueryValue: {{ .Values.kedaScaledObject.targetQueryValue | quote }}
+      query: SELECT get_number_of_instances FROM get_number_of_instances('{{ .Values.kedaScaledObject.applicationName }}', '{{ .Values.kedaScaledObject.projectName }}', '{{ .Values.kedaScaledObject.environmentName }}');
+      dbName: {{ .Values.postgres.dbName }}
+      userName: {{ .Values.postgres.username }}
+      passwordFromEnv: POSTGRES_DB_NAME
+      host: {{ .Values.postgres.host }}
+      port: {{ .Values.postgres.port | quote  }}
+      sslmode: disable

@@ -1,8 +1,10 @@
 ﻿@page "/scaling-configurations"
+@rendermode InteractiveAuto
+@attribute [StreamRendering(true)]
+@using System.Text.Json
 @inject ScaleStoreApiService ScaleStoreApiService
 @inject ProjectPreferenceApiService ProjectPreferenceApiService
 @inject ILogger<ScalingConfigurations> Logger
-@attribute [StreamRendering(true)]
 
 <PageTitle>
     Scale Configurations For Project @ProjectId
@@ -14,9 +16,9 @@
     Create
 </button>
 
-@if (PageData?.ScalingConfigurationTables != null)
+@if (PageData is not null)
 {
-    @foreach (var scalingConfigurationTable in PageData.ScalingConfigurationTables)
+    @foreach (var scalingConfigurationTable in PageData)
     {
         <h4>@scalingConfigurationTable.EnvironmentName</h4>
 
@@ -35,8 +37,8 @@
                         <td>@row.ApplicationName</td>
                         <td>@row.NumberOfInstances</td>
                         <td>
-                            <button class="btn btn-danger btn-small"> - </button>
-                            <button class="btn btn-success btn-small"> + </button>
+                            <button class="btn btn-danger btn-small" @onclick="async () => await DecrementScalingConfiguration(row.Id)"> - </button>
+                            <button class="btn btn-success btn-small" @onclick="async () => await IncrementScalingConfiguration(row.Id)"> + </button>
                         </td>
                     </tr>
                 }
@@ -52,20 +54,18 @@ else
 @code {
     private List<ScalingConfigurationTableRow>? ScalingConfigurationList = null;
     private int ProjectId;
-    ScalingConfigurationPageData? PageData = null;
+
+    List<ScalingConfigurationTable> PageData => ScalingConfigurationList is not null ? FormatDataForTables(ScalingConfigurationList) : new();
 
     protected override async Task OnInitializedAsync()
     {
         await InitializePageData();
     }
 
-
-
     async Task InitializePageData()
     {
         var projectPreference = await ProjectPreferenceApiService.GetProjectPreference(1);
         ProjectId = projectPreference.ProjectId;
-
 
         ScalingConfigurationList = await ScaleStoreApiService.GetScalingConfigurations(ProjectId) ?? new();
         Logger.LogDebug("Scaling Configurations: {0}", ScalingConfigurationList);
@@ -73,7 +73,7 @@ else
         FormatDataForTables(ScalingConfigurationList);
     }
 
-    void FormatDataForTables(List<ScalingConfigurationTableRow> tableRows)
+    List<ScalingConfigurationTable> FormatDataForTables(List<ScalingConfigurationTableRow> tableRows)
     {
         // Group the tableRows by EnvironmentName
         var groupedByEnvironment = tableRows.GroupBy(row => row.EnvironmentName);
@@ -86,9 +86,13 @@ else
             // Create a list of TableRow for each group
             var tableRowsList = group.Select(row => new TableRow
                 {
+                    Id = row.Id,
                     ApplicationName = row.ApplicationName,
-                    NumberOfInstances = row.NumberOfInstances
-                }).ToList();
+                    NumberOfInstances = row.NumberOfInstances,
+
+                })
+                .OrderBy(row => row.ApplicationName)
+                .ToList();
 
             // Add the group to the list of ScalingConfigurationTable
             scalingConfigurationTables.Add(new ScalingConfigurationTable
@@ -98,19 +102,15 @@ else
                 });
         }
 
-        // Create the final ScalingConfigurationPageData object
-        var scalingConfigurationPageData = new ScalingConfigurationPageData
-            {
-                ScalingConfigurationTables = scalingConfigurationTables
-            };
 
-
-        PageData = scalingConfigurationPageData;
-
+        return scalingConfigurationTables
+            .OrderBy(table => table.EnvironmentName)
+            .ToList();
     }
 
     public class TableRow
     {
+        public int Id { get; set; }
         public string ApplicationName { get; set; } = null!;
         public int NumberOfInstances { get; set; }
     }
@@ -126,6 +126,65 @@ else
     public class ScalingConfigurationPageData
     {
         public List<ScalingConfigurationTable> ScalingConfigurationTables { get; set; } = null!;
+    }
+
+
+
+    async Task IncrementScalingConfiguration(int scalingConfigId)
+    {
+        // Find the scaling configuration with the given id
+        var scalingConfiguration = ScalingConfigurationList.FirstOrDefault(scalingConfig => scalingConfig.Id == scalingConfigId) ?? new();
+
+
+        // Increment the number of instances
+        var newNumberOfInstances = scalingConfiguration.NumberOfInstances + 1;
+
+
+        // Update the scaling configuration
+        scalingConfiguration.NumberOfInstances = newNumberOfInstances;
+
+        var requestBody = new UpdateScalingConfigurationRequest
+        {
+            ApplicationID = 0,
+            EnvironmentID = 0,
+            ScalingID = scalingConfigId,
+            NumberOfInstances = newNumberOfInstances
+        };
+
+        Logger.LogInformation("UpdateScalingConfigurationRequest: {0}", JsonSerializer.Serialize(requestBody));
+
+        // Update the UI
+        await ScaleStoreApiService.UpdateScalingConfiguration(requestBody);
+
+        StateHasChanged();
+    }
+
+    async Task DecrementScalingConfiguration(int scalingConfigId)
+    {
+        // Find the scaling configuration with the given id
+        var scalingConfiguration = ScalingConfigurationList?.FirstOrDefault(scalingConfig => scalingConfig.Id == scalingConfigId) ?? new();
+
+        // Decrement the number of instances
+        var newNumberOfInstances = scalingConfiguration.NumberOfInstances - 1;
+
+        // Update the scaling configuration
+        scalingConfiguration.NumberOfInstances = newNumberOfInstances;
+
+
+        var requestBody = new UpdateScalingConfigurationRequest
+        {
+            ApplicationID = 0,
+            EnvironmentID = 0,
+            ScalingID = scalingConfigId,
+            NumberOfInstances = newNumberOfInstances
+        };
+
+        Logger.LogInformation("UpdateScalingConfigurationRequest: {0}", JsonSerializer.Serialize(requestBody));
+
+        // Update the UI
+        await ScaleStoreApiService.UpdateScalingConfiguration(requestBody);
+
+        StateHasChanged();
     }
 
 }

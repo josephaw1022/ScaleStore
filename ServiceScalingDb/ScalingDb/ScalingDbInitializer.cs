@@ -3,6 +3,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
+using Microsoft.AspNetCore.Http.Features;
 
 
 namespace ServiceScalingDb.ScalingDb;
@@ -43,10 +44,6 @@ internal sealed class ScalingDbInitializer : BackgroundService
         _logger.LogInformation("Database initialization completed after {ElapsedMilliseconds}ms", sw.ElapsedMilliseconds);
     }
 
-
-
-
-
     private async Task SeedProjectAsync(ScalingDbContext dbContext, CancellationToken cancellationToken)
     {
         await SeedProjectOne(dbContext, cancellationToken);
@@ -68,7 +65,7 @@ internal sealed class ScalingDbInitializer : BackgroundService
         await dbContext.Environments.AddRangeAsync(devEnvironment, devEnvironment2, devEnvironment3);
         await dbContext.SaveChangesAsync(cancellationToken);
 
-        var application1 = new Application { ApplicationName = "Authorization", Project = project1 };
+        var application1 = new Application { ApplicationName = "Api Gateway", Project = project1 };
         var application2 = new Application { ApplicationName = "NextJs UI/API", Project = project1 };
         await dbContext.Applications.AddRangeAsync(application1, application2);
         await dbContext.SaveChangesAsync(cancellationToken);

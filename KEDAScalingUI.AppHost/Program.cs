@@ -1,20 +1,40 @@
+using Aspire.Hosting;
+using Microsoft.Extensions.Hosting;
+
 var builder = DistributedApplication.CreateBuilder(args);
 
-
-
 // Scaling
-var scalingDb = builder.AddPostgresContainer("scalestore-db", 5433, "JoeMontana3034")
-    .AddDatabase("scalestore");
-
-builder.AddProject<Projects.ServiceScalingDb>("scalestore-dbapp")
-                    .WithReference(scalingDb);
-
+var scalingDbApp = builder.AddProject<Projects.ServiceScalingDb>("scalestore-dbapp");
 var scaleStoreCache = builder.AddRedisContainer("scalestore-cache", 6379);
-
-
 var scaleStoreHttpApi = builder.AddProject<Projects.ServiceScalingWebApi>("scalestore-webapi")
-    .WithReference(scalingDb)
     .WithReference(scaleStoreCache);
+
+
+var secretScaleStoreDbConnectionString = builder.Configuration["scaleStoreDbConnectionString"];
+
+if (builder.Environment.IsDevelopment())
+{
+    var scalingDb = builder.AddPostgresContainer("scalestore-db", 5433, "JoeMontana3034")
+        .AddDatabase("scalestore");
+
+    scaleStoreHttpApi.WithReference(scalingDb);
+    scalingDbApp.WithReference(scalingDb);
+}
+else
+{
+    if (!string.IsNullOrWhiteSpace(secretScaleStoreDbConnectionString))
+    {
+        scaleStoreHttpApi.WithEnvironment("ConnectionStrings__scalestore", secretScaleStoreDbConnectionString);
+        scalingDbApp.WithEnvironment("ConnectionStrings__scalestore", secretScaleStoreDbConnectionString);
+    }
+
+    throw new InvalidOperationException("""
+        A password for your external database is not configured.
+        Add one to the AppHost project's user secrets with the key 'scaleStoreDbConnectionString', e.g. dotnet user-secrets set scaleStoreDbConnectionString connection string
+        """);
+
+
+}
 
 
 // Preference Service

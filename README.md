@@ -3,6 +3,13 @@
 ## Overview
 Scale Store is a microservices suite designed to simplify the management of scaling configurations for applications within Kubernetes environments. It offers a user-friendly interface to control the number of instances for each application, making it particularly useful in environments with predictable load patterns such as small government projects, internal company tools, and sandbox development environments. Scale Store's intuitive UI eliminates the need for direct manipulation of Kubernetes YAML files, streamlining the scaling process.
 
+
+
+## Quick Demo - Click To View Video Demo
+
+[![ScaleStore Demo](https://scalestoremedia.blob.core.windows.net/scalestore-assets/scalestore-preview.png)](https://scalestoremedia.blob.core.windows.net/scalestore-assets/ScaleStoreDemo.mp4)
+
+
 ## Key Features
 - **User-Friendly Interface**: Manage and store scaling configurations through a simple and intuitive UI.
 - **Integration with Kubernetes and KEDA**: Seamlessly works with Kubernetes and KEDA to dynamically adjust application scaling.

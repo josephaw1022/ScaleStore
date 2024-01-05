@@ -5,7 +5,7 @@ Scale Store is a microservices suite designed to simplify the management of scal
 
 
 
-## Youtube Demo
+## Quick Demo
 
 [![ScaleStore Demo](https://scalestoremedia.blob.core.windows.net/scalestore-assets/scalestore-preview.png)](https://scalestoremedia.blob.core.windows.net/scalestore-assets/ScaleStoreDemo.mp4)
 

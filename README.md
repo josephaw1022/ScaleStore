@@ -1,4 +1,4 @@
-# Scale Store - Manage Pod Scaling Via an UI
+# Scale Store - Manage Pod Scaling Via a UI
 
 ## Overview
 Scale Store is a microservices suite designed to simplify the management of scaling configurations for applications within Kubernetes environments. It offers a user-friendly interface to control the number of instances for each application, making it particularly useful in environments with predictable load patterns such as small government projects, internal company tools, and sandbox development environments. Scale Store's intuitive UI eliminates the need for direct manipulation of Kubernetes YAML files, streamlining the scaling process.

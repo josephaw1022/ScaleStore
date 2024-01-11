@@ -1,5 +1,4 @@
 ﻿using PreferenceDTO;
-using System.Text.Json;
 namespace ScaleStoreWebUI.Services;
 
 public class ProjectPreferenceApiService(HttpClient httpClient)

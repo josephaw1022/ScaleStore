@@ -1,4 +1,3 @@
-using Aspire.Hosting;
 using Microsoft.Extensions.Hosting;
 
 var builder = DistributedApplication.CreateBuilder(args);
@@ -32,7 +31,6 @@ else
         A password for your external database is not configured.
         Add one to the AppHost project's user secrets with the key 'scaleStoreDbConnectionString', e.g. dotnet user-secrets set scaleStoreDbConnectionString connection string
         """);
-
 
 }
 

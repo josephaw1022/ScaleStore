@@ -5,11 +5,13 @@ using MediatR;
 using ScaleStoreHttpApi.Requests;
 using ServiceScalingWebApi.Requests;
 using Microsoft.AspNetCore.OutputCaching;
+using Asp.Versioning;
 
 namespace ScaleStoreHttpApi.Controllers
 {
+    [ApiVersion(1.0)]
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     [OutputCache(Duration = 5)]
     public class ProjectsController : ControllerBase
     {

@@ -1,12 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Asp.Versioning;
+using Microsoft.AspNetCore.Mvc;
 using PreferenceAPI.Services;
 using PreferenceDTO;
-using Microsoft.AspNetCore.OutputCaching;
 
 namespace PreferenceAPI.Controllers;
 
+[ApiVersion(1.0)]
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/v{version:apiVersion}/[controller]")]
 public class ProjectPreferenceController(ProjectPreferenceService projectPreferenceService) : ControllerBase
 {
     [HttpGet("{userId:int}")]

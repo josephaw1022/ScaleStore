@@ -6,7 +6,7 @@ public class ServiceScalingHttpApiService(HttpClient _httpClient)
 {
 
     public async Task<List<ProjectName>> GetListOfProjects(int userId) => 
-        await _httpClient.GetFromJsonAsync<List<ProjectName>>($"api/Projects?userId={userId}") ?? new List<ProjectName>();
+        await _httpClient.GetFromJsonAsync<List<ProjectName>>($"api/v1.0/Projects?userId={userId}") ?? new List<ProjectName>();
     
 }
 

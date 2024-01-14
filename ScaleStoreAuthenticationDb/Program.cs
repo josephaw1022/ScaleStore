@@ -13,7 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.AddServiceDefaults();
 
 
-builder.AddNpgsqlDbContext<AuthDbContext>("authentication");
+builder.AddNpgsqlDbContext<AuthDbContext>("keycloakdb");
 
 
 builder.Services.AddSingleton<AuthDbInitializer>();

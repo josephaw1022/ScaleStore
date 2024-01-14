@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Threading;
+using Npgsql;
 
 namespace ScaleStoreAuthenticationDb.Auth;
 
@@ -25,7 +26,7 @@ internal sealed class AuthDbInitializer : BackgroundService
     {
         using var scope = _serviceProvider.CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<AuthDbContext>();
-
+    
         await InitializeDatabaseAsync(dbContext, cancellationToken);
     }
 

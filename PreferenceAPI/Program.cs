@@ -5,7 +5,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.AddServiceDefaults();
 
 // Add MongoDB support
-builder.AddMongoDBClient("preference");
+builder.AddMongoDBClient("preferencedb");
 
 
 builder.Services.AddHttpLogging(o =>

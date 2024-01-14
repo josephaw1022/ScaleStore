@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace ScaleStoreAuthenticationDb.Auth;
 
-public class AuthDbContext : IdentityDbContext<IdentityUser>
+public class AuthDbContext : DbContext
 {
     public AuthDbContext(DbContextOptions<AuthDbContext> options) : base(options)
     { }

@@ -10,7 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
 
-builder.AddNpgsqlDbContext<ScalingDbContext>("scalestore");
+builder.AddNpgsqlDbContext<ScalingDbContext>("scalestoredb");
 
 builder.Services.AddSingleton<ScalingDbInitializer>();
 

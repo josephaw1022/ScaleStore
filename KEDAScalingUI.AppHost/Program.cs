@@ -1,45 +1,64 @@
-using Microsoft.Extensions.Hosting;
-
 var builder = DistributedApplication.CreateBuilder(args);
 
-// Scaling
-var scalingDbApp = builder.AddProject<Projects.ServiceScalingDb>("scalestore-dbapp");
+///Databases
+
+// Postgres Information
+var postgresDbPassword = "JoeMontana3034";
+var postgresDbPort = 5432;
+var postgresDbUser = "postgres";
+
+// Database Containers
+var postgres = builder.AddPostgresContainer("postgres", postgresDbPort, postgresDbPassword);
+var mongo = builder.AddMongoDBContainer("mongo", 27017);
+
+// Databases
+var scalingDb = postgres.AddDatabase("scalestoredb");
+var keycloakDb = postgres.AddDatabase("keycloakdb");
+var preferenceDb = mongo.AddDatabase("preferencedb");
+
+/// Services
+
+// Authorization Service
+var keycloakDbApp = builder.AddProject<Projects.ScaleStoreAuthenticationDb>("authdbinitializer")
+    .WithReference(keycloakDb);
+
+var keycloak = builder.AddContainer("keycloak", "jboss/keycloak")
+    .WithServiceBinding(containerPort: 8080, hostPort:8080, name: "keycloak-http", scheme: "http")
+    .WithReference(keycloakDb)
+    .WithReference(keycloakDbApp);
+
+// Define environment variables for the keycloak container
+var keyCloakEnvironmentVariables = new Dictionary<string, string>()
+{
+    ["DB_VENDOR"] = "POSTGRES",
+    ["DB_ADDR"] = "host.docker.internal",
+    ["DB_DATABASE"] = "keycloakdb",
+    ["DB_USER"] = postgresDbUser,
+    ["DB_PASSWORD"] = postgresDbPassword,
+    ["KEYCLOAK_USER"] = "admin",
+    ["KEYCLOAK_PASSWORD"] = "admin",
+    ["KC_HOSTNAME_PORT"] = "8080"
+};
+
+// Add environment variables to the keycloak container
+foreach (KeyValuePair<string, string> kvp in keyCloakEnvironmentVariables)
+{
+    keycloak.WithEnvironment(kvp.Key, kvp.Value);
+}
+
+
+// Scaling Service
+var scalingDbApp = builder.AddProject<Projects.ServiceScalingDb>("scalestore-dbapp")
+    .WithReference(scalingDb);
+
 var scaleStoreCache = builder.AddRedisContainer("scalestore-cache", 6379);
+
 var scaleStoreHttpApi = builder.AddProject<Projects.ServiceScalingWebApi>("scalestore-webapi")
-    .WithReference(scaleStoreCache);
-
-
-var secretScaleStoreDbConnectionString = builder.Configuration["scaleStoreDbConnectionString"];
-
-if (builder.Environment.IsDevelopment())
-{
-    var scalingDb = builder.AddPostgresContainer("scalestore-db", 5433, "JoeMontana3034")
-        .AddDatabase("scalestore");
-
-    scaleStoreHttpApi.WithReference(scalingDb);
-    scalingDbApp.WithReference(scalingDb);
-}
-else
-{
-    if (!string.IsNullOrWhiteSpace(secretScaleStoreDbConnectionString))
-    {
-        scaleStoreHttpApi.WithEnvironment("ConnectionStrings__scalestore", secretScaleStoreDbConnectionString);
-        scalingDbApp.WithEnvironment("ConnectionStrings__scalestore", secretScaleStoreDbConnectionString);
-    }
-
-    throw new InvalidOperationException("""
-        A password for your external database is not configured.
-        Add one to the AppHost project's user secrets with the key 'scaleStoreDbConnectionString', e.g. dotnet user-secrets set scaleStoreDbConnectionString connection string
-        """);
-
-}
-
+    .WithReference(scaleStoreCache)
+    .WithReference(scalingDbApp);
 
 // Preference Service
 var preferenceCache = builder.AddRedisContainer("preference-cache", 6380);
-
-var preferenceDb = builder.AddMongoDBContainer("preference-db", 27017)
-    .AddDatabase("preference");
 
 var preferenceHttpApi = builder.AddProject<Projects.PreferenceAPI>("preferenceapi")
                            .WithReference(preferenceDb)
@@ -50,5 +69,6 @@ var preferenceHttpApi = builder.AddProject<Projects.PreferenceAPI>("preferenceap
 builder.AddProject<Projects.ScaleStoreWebUI>("scalestorewebui")
     .WithReference(scaleStoreHttpApi)
     .WithReference(preferenceHttpApi);
+
 
 builder.Build().Run();

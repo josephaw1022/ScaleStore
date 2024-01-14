@@ -3,13 +3,14 @@ using MediatR;
 using ScaleStoreHttpApi.Requests;
 using ServiceScalingDTO;
 using Microsoft.AspNetCore.OutputCaching;
+using Asp.Versioning;
 
 
 namespace ScaleStoreHttpApi.Controllers;
 
-
+[ApiVersion(1.0)]
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/v{version:apiVersion}/[controller]")]
 [OutputCache(Duration = 15)]
 public class ApplicationController : ControllerBase
 {

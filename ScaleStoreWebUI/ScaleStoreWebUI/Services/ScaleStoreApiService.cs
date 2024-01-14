@@ -8,32 +8,32 @@ public class ScaleStoreApiService(HttpClient httpClient, ILogger<ScaleStoreApiSe
 {
     public async Task<List<ProjectTableRow>?> GetProjects()
     {
-        return await httpClient.GetFromJsonAsync<List<ProjectTableRow>>("api/projects");
+        return await httpClient.GetFromJsonAsync<List<ProjectTableRow>>("api/v1.0/projects");
     }
 
     public async Task<List<EnvironmentTableRow>?> GetEnvironments(int projectId)
     {
-        return await httpClient.GetFromJsonAsync<List<EnvironmentTableRow>>($"api/environment?projectId={projectId}");
+        return await httpClient.GetFromJsonAsync<List<EnvironmentTableRow>>($"api/v1.0/environment?projectId={projectId}");
     }
 
     public async Task<List<ApplicationTableRow>?> GetApplications(int projectId)
     {
-        return await httpClient.GetFromJsonAsync<List<ApplicationTableRow>>($"api/application?projectId={projectId}");
+        return await httpClient.GetFromJsonAsync<List<ApplicationTableRow>>($"api/v1.0/application?projectId={projectId}");
     }
 
 
     public async Task<List<ScalingConfigurationTableRow>?> GetScalingConfigurations(int projectId)
     {
-        return await httpClient.GetFromJsonAsync<List<ScalingConfigurationTableRow>>($"api/ScalingConfiguration?projectId={projectId}");
+        return await httpClient.GetFromJsonAsync<List<ScalingConfigurationTableRow>>($"api/v1.0/ScalingConfiguration?projectId={projectId}");
     }
 
     public async Task<List<ProjectName>> GetListOfProjectNames(int userId) =>
-        await httpClient.GetFromJsonAsync<List<ProjectName>>($"api/Projects?userId={userId}") ?? new List<ProjectName>();
+        await httpClient.GetFromJsonAsync<List<ProjectName>>($"api/v1.0/Projects?userId={userId}") ?? new List<ProjectName>();
 
 
     public async Task<UpdateScalingConfigurationResponse> UpdateScalingConfiguration(UpdateScalingConfigurationRequest scalingConfiguration)
     {
-        await httpClient.PutAsJsonAsync($"api/ScalingConfiguration/{scalingConfiguration.ScalingID}", scalingConfiguration);
+        await httpClient.PutAsJsonAsync($"api/v1.0/ScalingConfiguration/{scalingConfiguration.ScalingID}", scalingConfiguration);
         return new UpdateScalingConfigurationResponse
         {
             ScalingID = scalingConfiguration.ScalingID,

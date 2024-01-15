@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PreferenceAPI\PreferenceAPI.csproj" />
+    <ProjectReference Include="..\PreferenceDb\PreferenceDb.csproj" />
     <ProjectReference Include="..\ScaleStoreAuthenticationDb\ScaleStoreAuthenticationDb.csproj" />
     <ProjectReference Include="..\ScaleStoreAuthenticationWebApi\ScaleStoreAuthenticationWebApi.csproj" />
     <ProjectReference Include="..\ScaleStoreHttpApi\ServiceScalingWebApi.csproj" />

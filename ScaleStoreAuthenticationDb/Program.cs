@@ -4,9 +4,6 @@ using Microsoft.Extensions.Hosting;
 using ScaleStoreAuthenticationDb.Auth;
 
 
-
-
-
 var builder = WebApplication.CreateBuilder(args);
 
 

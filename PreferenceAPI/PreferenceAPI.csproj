@@ -9,7 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="Asp.Versioning.Mvc" Version="8.0.0" />
-    <PackageReference Include="Aspire.MongoDB.Driver" Version="8.0.0-preview.2.23619.3" />
+    <PackageReference Include="Aspire.Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.0-preview.2.23619.3" />
     <PackageReference Include="Aspire.StackExchange.Redis.DistributedCaching" Version="8.0.0-preview.2.23619.3" />
     <PackageReference Include="Aspire.StackExchange.Redis.OutputCaching" Version="8.0.0-preview.2.23619.3" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\KEDAScalingUI.ServiceDefaults\KEDAScalingUI.ServiceDefaults.csproj" />
+    <ProjectReference Include="..\PreferenceDb\PreferenceDb.csproj" />
     <ProjectReference Include="..\PreferenceDTO\PreferenceDTO.csproj" />
     <ProjectReference Include="..\ServiceScalingCore\ServiceScalingCore.csproj" />
   </ItemGroup>

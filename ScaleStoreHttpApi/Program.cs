@@ -25,7 +25,7 @@ builder.Services.AddApiVersioning(
     .AddMvc();
 
 
-builder.AddNpgsqlDbContext<ScalingDbContext>("scalestore");
+builder.AddNpgsqlDbContext<ScalingDbContext>("scalestoredb");
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

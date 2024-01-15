@@ -1,20 +1,33 @@
+using KEDAScalingUI.AppHost;
+using Microsoft.Extensions.Configuration;
+
 var builder = DistributedApplication.CreateBuilder(args);
+
+// Load configuration from a file such as appsettings.json
+var configuration = new ConfigurationBuilder()
+    .SetBasePath(Directory.GetCurrentDirectory())
+    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+    .AddEnvironmentVariables()
+    .Build();
+
+// Create and load Keycloak configuration
+var keyCloakConfig = new KeycloakConfig();
+configuration.GetSection("Keycloak").Bind(keyCloakConfig);
+
 
 ///Databases
 
 // Postgres Information
 var postgresDbPassword = "JoeMontana3034";
 var postgresDbPort = 5432;
-var postgresDbUser = "postgres";
 
-// Database Containers
-var postgres = builder.AddPostgresContainer("postgres", postgresDbPort, postgresDbPassword);
-var mongo = builder.AddMongoDBContainer("mongo", 27017);
 
 // Databases
+var postgres = builder.AddPostgresContainer("postgres", postgresDbPort, postgresDbPassword);
+
 var scalingDb = postgres.AddDatabase("scalestoredb");
 var keycloakDb = postgres.AddDatabase("keycloakdb");
-var preferenceDb = mongo.AddDatabase("preferencedb");
+var preferenceDb = postgres.AddDatabase("preferencedb");
 
 /// Services
 
@@ -27,25 +40,15 @@ var keycloak = builder.AddContainer("keycloak", "jboss/keycloak")
     .WithReference(keycloakDb)
     .WithReference(keycloakDbApp);
 
-// Define environment variables for the keycloak container
-var keyCloakEnvironmentVariables = new Dictionary<string, string>()
-{
-    ["DB_VENDOR"] = "POSTGRES",
-    ["DB_ADDR"] = "host.docker.internal",
-    ["DB_DATABASE"] = "keycloakdb",
-    ["DB_USER"] = postgresDbUser,
-    ["DB_PASSWORD"] = postgresDbPassword,
-    ["KEYCLOAK_USER"] = "admin",
-    ["KEYCLOAK_PASSWORD"] = "admin",
-    ["KC_HOSTNAME_PORT"] = "8080"
-};
-
-// Add environment variables to the keycloak container
-foreach (KeyValuePair<string, string> kvp in keyCloakEnvironmentVariables)
-{
-    keycloak.WithEnvironment(kvp.Key, kvp.Value);
-}
-
+// Directly use keyCloakConfig to set environment variables for the keycloak container
+keycloak.WithEnvironment("DB_VENDOR", keyCloakConfig.DB_VENDOR)
+        .WithEnvironment("DB_ADDR", keyCloakConfig.DB_HOST)
+        .WithEnvironment("DB_DATABASE", keyCloakConfig.DB_DATABASE)
+        .WithEnvironment("DB_USER", keyCloakConfig.DB_USER)
+        .WithEnvironment("DB_PASSWORD", keyCloakConfig.DB_PASSWORD)
+        .WithEnvironment("KEYCLOAK_USER", keyCloakConfig.KEYCLOAK_USER)
+        .WithEnvironment("KEYCLOAK_PASSWORD", keyCloakConfig.KEYCLOAK_PASSWORD)
+        .WithEnvironment("KC_HOSTNAME_PORT", keyCloakConfig.KC_HOSTNAME_PORT);
 
 // Scaling Service
 var scalingDbApp = builder.AddProject<Projects.ServiceScalingDb>("scalestore-dbapp")
@@ -55,14 +58,19 @@ var scaleStoreCache = builder.AddRedisContainer("scalestore-cache", 6379);
 
 var scaleStoreHttpApi = builder.AddProject<Projects.ServiceScalingWebApi>("scalestore-webapi")
     .WithReference(scaleStoreCache)
-    .WithReference(scalingDbApp);
+    .WithReference(scalingDbApp)
+    .WithReference(scalingDb);
 
 // Preference Service
 var preferenceCache = builder.AddRedisContainer("preference-cache", 6380);
 
+var preferenceDbApp = builder.AddProject<Projects.PreferenceDb>("preferencedbapp")
+    .WithReference(preferenceDb);
+
 var preferenceHttpApi = builder.AddProject<Projects.PreferenceAPI>("preferenceapi")
                            .WithReference(preferenceDb)
                            .WithReference(scaleStoreHttpApi)
+                           .WithReference(preferenceDbApp)
                            .WithReference(preferenceCache);
 
 // web ui

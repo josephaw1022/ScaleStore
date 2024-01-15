@@ -1,13 +1,14 @@
 using Asp.Versioning;
 using PreferenceAPI.Services;
+using PreferenceDb.Preference;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
 
-// Add MongoDB support
-builder.AddMongoDBClient("preferencedb");
+// Add postgres support
 
+builder.AddNpgsqlDbContext<PreferenceDbContext>("preferencedb");
 
 builder.Services.AddApiVersioning(
                     options =>

@@ -1,6 +1,5 @@
 ﻿using ServiceScalingCore;
-using System.Net.Http;
-using System.Text.Json;
+using ServiceScalingDTO;
 
 namespace ScaleStoreWebUI.Services;
 
@@ -41,6 +40,27 @@ public class ScaleStoreApiService(HttpClient httpClient, ILogger<ScaleStoreApiSe
             EnvironmentID = scalingConfiguration.EnvironmentID,
             NumberOfInstances = scalingConfiguration.NumberOfInstances
         };
+    }
+
+    public async Task<bool> CreateApplication(string name, int projectId)
+    {
+        try
+        {
+
+            var newApplication = new CreateApplicationDTO
+            {
+                Name = name,
+                ProjectId = projectId
+            };
+
+            var message = await httpClient.PostAsJsonAsync($"api/v1.0/Application", newApplication);
+            return true;
+        }
+        catch (Exception e)
+        {
+            logger.LogError(e, "Error creating application");
+            return false;
+        }
     }
 
 }

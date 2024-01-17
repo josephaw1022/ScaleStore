@@ -15,8 +15,13 @@ namespace ScaleStoreHttpApi.Controllers;
 public class ApplicationController : ControllerBase
 {
     private readonly IMediator _mediator;
+    private readonly ILogger<ApplicationController> _logger;
 
-    public ApplicationController(IMediator mediator) => _mediator = mediator;
+    public ApplicationController(IMediator mediator, ILogger<ApplicationController> logger)
+    {
+        _mediator = mediator;
+        _logger = logger;
+    }
 
     [HttpGet("{id:int}")]
     public async Task<IActionResult> GetOne(int id)
@@ -42,8 +47,10 @@ public class ApplicationController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateApplicationDTO application)
     {
+        _logger.LogInformation($"Creating new application {application.Name} for project {application.ProjectId}");
+
         var create = await _mediator.Send(new CreateApplicationRequest(application.Name, application.ProjectId));
-        return CreatedAtAction(nameof(GetOne), new { id = create.Id }, create);
+        return CreatedAtAction(nameof(GetOne), new { ApplicationId = create.Id }, create);
     }
 
     [HttpPut("{id:int}")]

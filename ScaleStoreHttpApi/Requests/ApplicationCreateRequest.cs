@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using ServiceScalingDb.ScalingDb;
 using ServiceScalingCore;
+using ServiceScalingWebApi.Events;
 
 namespace ScaleStoreHttpApi.Requests;
 
@@ -29,10 +30,14 @@ public class CreateApplicationResponse : IApplicationCreateResponse
 public class CreateApplicationRequestHandler : IRequestHandler<CreateApplicationRequest, CreateApplicationResponse>
 {
     private readonly ScalingDbContext _context;
+    private readonly ILogger<CreateApplicationRequestHandler> _logger;
+    private readonly IMediator _mediator;
 
-    public CreateApplicationRequestHandler(ScalingDbContext context)
+    public CreateApplicationRequestHandler(ScalingDbContext context, ILogger<CreateApplicationRequestHandler> logger, IMediator mediator)
     {
         _context = context;
+        _logger = logger;
+        _mediator = mediator;
     }
 
     public async Task<CreateApplicationResponse> Handle(CreateApplicationRequest request, CancellationToken cancellationToken)
@@ -43,8 +48,13 @@ public class CreateApplicationRequestHandler : IRequestHandler<CreateApplication
             ProjectID = request.ProjectId
         };
 
-        _context.Applications.Add(newApplication);
+        _logger.LogInformation($"Creating new application {newApplication.ApplicationName} for project {newApplication.ProjectID}");
+
+        await _context.Applications.AddAsync(newApplication);
         await _context.SaveChangesAsync(cancellationToken);
+
+
+        await _mediator.Publish(new CreateScalingConfigurationsForNewApplicationEvent(newApplication.ApplicationID, newApplication.ProjectID), cancellationToken);
 
         return new CreateApplicationResponse
         {

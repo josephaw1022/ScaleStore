@@ -63,6 +63,28 @@ public class ScaleStoreApiService(HttpClient httpClient, ILogger<ScaleStoreApiSe
         }
     }
 
+
+
+    public async Task<bool> CreateProject(string name)
+    {
+        try
+        {
+
+            var newProject = new ProjectCreateDTO
+            {
+                Name = name,
+            };
+
+            var message = await httpClient.PostAsJsonAsync($"api/v1.0/Projects", newProject);
+            return true;
+        }
+        catch (Exception e)
+        {
+            logger.LogError(e, "Error creating project");
+            return false;
+        }
+    }
+
 }
 
 

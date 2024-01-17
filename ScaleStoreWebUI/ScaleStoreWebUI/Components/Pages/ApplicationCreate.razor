@@ -1,35 +1,98 @@
 ﻿@page "/applications/create"
+@using PreferenceDTO
+@inject ILogger<ApplicationCreate> Logger
+@inject ScaleStoreApiService ScaleStoreApiService
+@inject ProjectPreferenceApiService ProjectPreferenceApiService
+@inject NavigationManager NavigationManager
+@rendermode InteractiveServer
 
+
+
+<button class="btn btn-danger rounded-2 px-2 " @onclick="GoBack">
+    Back
+</button>
+
+
+@if (!loading)
+{
+    
 <div class="container mt-4">
+
+
+    <h2>
+        Create Application
+    </h2>
     <div class="row">
         <div class="col-md-6 offset-md-3">
-            <h2>Create Application</h2>
-            <EditForm Model="@applicationCreateModel" OnValidSubmit="@HandleValidSubmit">
-                <DataAnnotationsValidator />
+
+            <EditForm Model="@this" OnSubmit="@HandleValidSubmit" FormName="CreateApplicationForm">
 
                 <div class="mb-3">
-                    <label for="appName" class="form-label">Application Name</label>
-                    <InputText id="appName" class="form-control" @bind-Value="@applicationCreateModel.Name" />
-                    <ValidationMessage For="@(() => applicationCreateModel.Name)" />
+                    <InputText @bind-Value="Name" />
                 </div>
+                <DataAnnotationsValidator />
 
-              
                 <button type="submit" class="btn btn-primary">Create</button>
             </EditForm>
         </div>
     </div>
 </div>
+}
+
+else
+{
+    <p><em>Loading...</em></p>
+}
 
 @code {
-    private ApplicationCreateModel applicationCreateModel = new();
 
-    private async Task HandleValidSubmit()
+    ProjectPreference projectPreference = new();
+    SubmitApplicationModel submit = new();
+    bool loading = false;
+
+
+    [SupplyParameterFromForm]
+    public string? Name { get; set; }
+
+    protected override async Task OnInitializedAsync()
     {
-
+        projectPreference = await ProjectPreferenceApiService.GetProjectPreference(1);
     }
 
-    public class ApplicationCreateModel
+
+    async Task HandleValidSubmit()
     {
-        public string Name { get; set; }
+        loading = true;
+
+        submit = new SubmitApplicationModel
+            {
+                Name = Name ?? "",
+                ProjectId = projectPreference.ProjectId
+            };
+
+        Logger.LogInformation($"Application Name: {submit.Name}, ProjectId: {submit.ProjectId}");
+
+        var response = await ScaleStoreApiService.CreateApplication(submit.Name, submit.ProjectId);
+
+        Logger.LogInformation($"Application created?: {response}");
+
+
+        NavigationManager.NavigateTo("/applications");
+    }
+
+
+    void GoBack()
+    {
+        Logger.LogInformation("Go back to applications page");
+        NavigationManager.NavigateTo("/applications");
+    }
+
+
+
+    public class SubmitApplicationModel : IApplicationCreate
+    {
+        public string Name { get; set; } = null!;
+
+        public int ProjectId { get; set; }
     }
 }

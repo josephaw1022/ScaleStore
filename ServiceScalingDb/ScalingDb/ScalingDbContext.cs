@@ -35,6 +35,10 @@ public class ScalingDbContext : DbContext
         modelBuilder.Entity<Environment>()
             .HasMany(e => e.ScalingConfigurations)
             .WithOne(sc => sc.Environment);
+
+        modelBuilder.Entity<Application>()
+        .HasIndex(a => new { a.ApplicationName, a.ProjectID })
+        .IsUnique();
     }
 
 }

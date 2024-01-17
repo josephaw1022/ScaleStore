@@ -1,10 +1,16 @@
 ﻿@page "/projects"
 @inject ScaleStoreApiService httpService
+@inject NavigationManager NavigationManager
 @inject ILogger<Projects> logger
 @attribute [StreamRendering(true)]
+@rendermode InteractiveServer
 
 
 <h3>Projects</h3>
+
+<button class="btn btn-primary px-4 rounded-2 " @onclick="GotoCreateProject">
+    Create
+</button>
 
 @if (projects is null)
 {
@@ -43,5 +49,11 @@ else
         projects = await httpService.GetProjects();
         logger.LogDebug("Projects: {0}", projects);
 
+    }
+
+
+    void GotoCreateProject()
+    {
+        NavigationManager.NavigateTo("/projects/create");
     }
 }

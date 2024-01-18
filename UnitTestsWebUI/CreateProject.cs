@@ -24,7 +24,7 @@ namespace UnitTestsWebUI
 
             // Mock ILogger
             var loggerMock = Substitute.For<ILogger<ProjectsCreate>>();
-            TestContext.Services.AddSingleton<ILogger<ProjectsCreate>>(loggerMock);
+            TestContext.Services.AddSingleton(loggerMock);
         }
 
         [Test]

@@ -3,7 +3,7 @@ using ServiceScalingDTO;
 
 namespace ScaleStoreWebUI.Services;
 
-public class ScaleStoreApiService(HttpClient httpClient, ILogger<ScaleStoreApiService> logger)
+public class ScaleStoreApiService(HttpClient httpClient)
 {
     public async Task<List<ProjectTableRow>?> GetProjects()
     {
@@ -58,7 +58,6 @@ public class ScaleStoreApiService(HttpClient httpClient, ILogger<ScaleStoreApiSe
         }
         catch (Exception e)
         {
-            logger.LogError(e, "Error creating application");
             return false;
         }
     }
@@ -80,7 +79,6 @@ public class ScaleStoreApiService(HttpClient httpClient, ILogger<ScaleStoreApiSe
         }
         catch (Exception e)
         {
-            logger.LogError(e, "Error creating project");
             return false;
         }
     }
@@ -104,7 +102,6 @@ public class ScaleStoreApiService(HttpClient httpClient, ILogger<ScaleStoreApiSe
         }
         catch (Exception e)
         {
-            logger.LogError(e, "Error creating environment");
             return false;
         }
     }

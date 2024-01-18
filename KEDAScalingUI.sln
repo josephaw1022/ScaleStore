@@ -36,9 +36,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PreferenceDTO", "Preference
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PreferenceDb", "PreferenceDb\PreferenceDb.csproj", "{E62F19A3-355E-4504-ACD8-7C634A4BF8D3}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{F9FCF4A2-C486-4984-9EA4-0C84D11A9EBF}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Testing", "Testing", "{F9FCF4A2-C486-4984-9EA4-0C84D11A9EBF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTestsWebUI", "UnitTestsWebUI\UnitTestsWebUI.csproj", "{1C585FE5-264F-4811-9034-2C0042D32CB9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTestsWebUI", "UnitTestsWebUI\UnitTestsWebUI.csproj", "{1C585FE5-264F-4811-9034-2C0042D32CB9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

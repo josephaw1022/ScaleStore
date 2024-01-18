@@ -53,7 +53,12 @@ internal sealed class ScalingDbInitializer : BackgroundService
 
     private async Task SeedProjectOne(ScalingDbContext dbContext, CancellationToken cancellationToken)
     {
-        var project1 = new Project { ProjectName = "PathwayPlus" };
+
+        if (await dbContext.Projects.AnyAsync(p => p.ProjectName == "PathwayPlus", cancellationToken))
+        {
+            return;
+        }
+            var project1 = new Project { ProjectName = "PathwayPlus" };
         await dbContext.Projects.AddAsync(project1);
         await dbContext.SaveChangesAsync(cancellationToken);
 
@@ -92,6 +97,12 @@ internal sealed class ScalingDbInitializer : BackgroundService
 
     private async Task SeedProjectTwo(ScalingDbContext dbContext, CancellationToken cancellationToken)
     {
+
+        if(await dbContext.Projects.AnyAsync(p => p.ProjectName == "MendMind", cancellationToken))
+        {
+            return;
+        }
+
         var project = new Project { ProjectName = "MendMind" };
         await dbContext.Projects.AddAsync(project);
         await dbContext.SaveChangesAsync(cancellationToken);

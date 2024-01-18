@@ -1,3 +1,4 @@
+using Aspire.Hosting;
 using KEDAScalingUI.AppHost;
 using Microsoft.Extensions.Configuration;
 
@@ -23,7 +24,8 @@ var postgresDbPort = 5432;
 
 
 // Databases
-var postgres = builder.AddPostgresContainer("postgres", postgresDbPort, postgresDbPassword);
+var postgres = builder.AddPostgresContainer("postgres", postgresDbPort, postgresDbPassword)
+    .WithVolumeMount("scalestore-postgres-data", "/var/lib/postgresql/data", VolumeMountType.Named);
 
 var scalingDb = postgres.AddDatabase("scalestoredb");
 var keycloakDb = postgres.AddDatabase("keycloakdb");
@@ -77,6 +79,9 @@ var preferenceHttpApi = builder.AddProject<Projects.PreferenceAPI>("preferenceap
 builder.AddProject<Projects.ScaleStoreWebUI>("scalestorewebui")
     .WithReference(scaleStoreHttpApi)
     .WithReference(preferenceHttpApi);
+
+
+var apiGateway = builder.AddProject<Projects.ApiGateway>("apigateway");
 
 
 builder.Build().Run();

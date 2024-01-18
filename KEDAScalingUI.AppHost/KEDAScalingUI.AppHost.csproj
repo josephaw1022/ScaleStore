@@ -14,6 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ApiGateway\ApiGateway.csproj" />
     <ProjectReference Include="..\PreferenceAPI\PreferenceAPI.csproj" />
     <ProjectReference Include="..\PreferenceDb\PreferenceDb.csproj" />
     <ProjectReference Include="..\ScaleStoreAuthenticationDb\ScaleStoreAuthenticationDb.csproj" />

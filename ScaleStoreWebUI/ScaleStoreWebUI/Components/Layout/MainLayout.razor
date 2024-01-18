@@ -1,12 +1,16 @@
 ﻿@inherits LayoutComponentBase
+@inject NavigationManager NavigationManager
+@inject ILogger<MainLayout> Logger
 
 <div class="page">
     <div class="sidebar">
         <NavMenu @rendermode="InteractiveServer" />
     </div>
-
     <main>
-        <TopRow @rendermode="InteractiveServer" />
+        @if(ShowSelectProject)
+        {
+            <TopRow @rendermode="InteractiveServer" />
+        }
         <article class="content px-4">
             @Body
         </article>
@@ -18,3 +22,27 @@
     <a href="" class="reload">Reload</a>
     <a class="dismiss">🗙</a>
 </div>
+
+
+
+@code {
+
+    bool ShowSelectProject = false;
+
+    protected override void OnInitialized()
+    {
+        ShouldRouteShowSelectProject();
+    }
+
+    void ShouldRouteShowSelectProject()
+    {
+        var currentRoute = NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
+
+        if (currentRoute == "applications" || currentRoute == "environments" || currentRoute == "scaling-configurations")
+        {
+            ShowSelectProject = true;
+        }
+    }
+
+
+}

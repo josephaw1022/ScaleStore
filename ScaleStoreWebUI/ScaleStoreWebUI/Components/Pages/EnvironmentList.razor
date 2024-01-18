@@ -1,11 +1,16 @@
 ﻿@page "/environments"
 @inject ScaleStoreApiService ScaleStoreApiService
 @inject ProjectPreferenceApiService ProjectPreferenceApiService
+@inject NavigationManager NavigationManager
 @inject ILogger<EnvironmentList> Logger
 @attribute [StreamRendering(true)]
-
+@rendermode InteractiveServer
 
 <h3>Environments</h3>
+
+<button class="btn btn-primary" @onclick="GotoCreateEnvironment">
+    Create
+</button>
 
 @if (Environments is null)
 {
@@ -60,4 +65,10 @@ else
         Environments = await ScaleStoreApiService.GetEnvironments(ProjectId);
         Logger.LogDebug("Environments: {0}", Environments);
     }
+
+    void GotoCreateEnvironment()
+    {
+        NavigationManager.NavigateTo("/environments/create");
+    }
+
 }

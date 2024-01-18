@@ -85,6 +85,31 @@ public class ScaleStoreApiService(HttpClient httpClient, ILogger<ScaleStoreApiSe
         }
     }
 
+
+
+
+    public async Task<bool> CreateEnvironment(string name, int projectId)
+    {
+        try
+        {
+
+            var newEnvironment = new CreateEnvironmentDTO
+            {
+                EnvironmentName = name,
+                ProjectID = projectId
+            };
+
+            var message = await httpClient.PostAsJsonAsync($"api/v1.0/Environment", newEnvironment);
+            return true;
+        }
+        catch (Exception e)
+        {
+            logger.LogError(e, "Error creating environment");
+            return false;
+        }
+    }
+
+
 }
 
 

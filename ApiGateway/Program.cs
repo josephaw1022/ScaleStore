@@ -42,7 +42,7 @@ var app = builder.Build();
 app.MapGet("/", () => "Welcome to the application! Access /userinfo for user details or /logout to log out.");
 
 
-app.MapGet("/userinfo", (HttpContext httpContext) =>
+app.MapGet("/userinfo", async Task<string> (HttpContext httpContext) =>
 {
 
     if (!httpContext.User.Identity.IsAuthenticated)
@@ -59,7 +59,9 @@ app.MapGet("/userinfo", (HttpContext httpContext) =>
 
     var claimsListString = JsonSerializer.Serialize(claims, new JsonSerializerOptions { WriteIndented = true });
 
-    return $"User Info:\nUsername: {username}\nEmail: {userEmail}\nClaims:\n{claimsListString}";
+    var accessToken = await httpContext.GetTokenAsync("access_token");
+
+    return $"User Info:\nUsername: {username}\nEmail: {userEmail}\nClaims:\n{claimsListString}\n\nAccess Token:\n\n{accessToken}";
 
 }).RequireAuthorization();
 

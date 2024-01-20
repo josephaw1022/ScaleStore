@@ -27,13 +27,17 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (var project in projects)
-            {
-                <tr>
-                    <td>@project.Name</td>
-                    <td>@project.NumberOfEnvironments</td>
-                    <td>@project.NumberOfApplications</td>
-                </tr>
+            @{
+                int rowIndex = 0;
+                foreach (var project in projects)
+                {
+                    <tr data-test-id="@($"project-row-{rowIndex}")">
+                        <td>@project.Name</td>
+                        <td>@project.NumberOfEnvironments</td>
+                        <td>@project.NumberOfApplications</td>
+                    </tr>
+                    rowIndex++;
+                }
             }
         </tbody>
     </table>

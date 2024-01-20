@@ -28,8 +28,8 @@ namespace ScaleStoreHttpApi.Requests
 
     public class ProjectsGetOneRequestHandler : IRequestHandler<ProjectsGetOneRequest, ProjectsGetOneRequestResponse>
     {
-        private readonly ScalingDbContext dbContext;
-        public ProjectsGetOneRequestHandler( ScalingDbContext dbContext)
+        private readonly IScalingDbContext dbContext;
+        public ProjectsGetOneRequestHandler( IScalingDbContext dbContext)
         {
             this.dbContext = dbContext;
         }

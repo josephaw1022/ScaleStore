@@ -20,9 +20,9 @@ public class ProjectTableViewRequestResponse : IProjectTableViewResponse
 
 public class ProjectsTableViewRequestHandler : IRequestHandler<ProjectsTableViewRequest, List<ProjectTableViewRequestResponse>>
 {
-    private readonly ScalingDbContext dbContext;
+    private readonly IScalingDbContext dbContext;
 
-    public ProjectsTableViewRequestHandler(ScalingDbContext dbContext)
+    public ProjectsTableViewRequestHandler(IScalingDbContext dbContext)
     {
         this.dbContext = dbContext;
     }

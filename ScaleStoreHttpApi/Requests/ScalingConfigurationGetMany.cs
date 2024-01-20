@@ -36,11 +36,11 @@ namespace ScaleStoreHttpApi.Requests
 
     public class GetManyScalingConfigurationsRequestHandler : IRequestHandler<GetManyScalingConfigurationsRequest, List<ScalingConfigurationsTableViewResponse>>
     {
-        private readonly ScalingDbContext dbContext;
+        private readonly IScalingDbContext dbContext;
 
         private readonly ILogger<GetManyScalingConfigurationsRequestHandler> logger;
 
-        public GetManyScalingConfigurationsRequestHandler(ScalingDbContext dbContext, ILogger<GetManyScalingConfigurationsRequestHandler> logger)
+        public GetManyScalingConfigurationsRequestHandler(IScalingDbContext dbContext, ILogger<GetManyScalingConfigurationsRequestHandler> logger)
         {
             this.dbContext = dbContext;
             this.logger = logger;

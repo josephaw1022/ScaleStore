@@ -24,9 +24,9 @@
 
     public class GetManyEnvironmentsRequestHandler : IRequestHandler<GetManyEnvironmentsRequest, List<GetManyEnvironmentsResponse>>
     {
-        private readonly ScalingDbContext dbContext;
+        private readonly IScalingDbContext dbContext;
 
-        public GetManyEnvironmentsRequestHandler(ScalingDbContext dbContext)
+        public GetManyEnvironmentsRequestHandler(IScalingDbContext dbContext)
         {
             this.dbContext = dbContext;
         }

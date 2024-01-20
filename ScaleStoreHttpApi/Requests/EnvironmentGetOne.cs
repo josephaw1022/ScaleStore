@@ -18,9 +18,9 @@ public class GetEnvironmentResponse : IGetEnvironmentResponse
 
 public class GetEnvironmentRequestHandler : IRequestHandler<GetEnvironmentRequest, GetEnvironmentResponse>
 {
-    private readonly ScalingDbContext dbContext;
+    private readonly IScalingDbContext dbContext;
 
-    public GetEnvironmentRequestHandler(ScalingDbContext dbContext)
+    public GetEnvironmentRequestHandler(IScalingDbContext dbContext)
     {
         this.dbContext = dbContext;
     }

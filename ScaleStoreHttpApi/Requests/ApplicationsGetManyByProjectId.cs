@@ -29,9 +29,9 @@ public class ApplicationsGetManyRequestResponse : IApplicationsGetManyResponse
 
 public class ApplicationsGetManyRequestHandler : IRequestHandler<ApplicationsGetManyRequest, List<ApplicationsGetManyRequestResponse>>
 {
-    private readonly ScalingDbContext _context;
+    private readonly IScalingDbContext _context;
 
-    public ApplicationsGetManyRequestHandler(ScalingDbContext context)
+    public ApplicationsGetManyRequestHandler(IScalingDbContext context)
     {
         _context = context;
     }

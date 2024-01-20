@@ -15,9 +15,9 @@ namespace ScaleStoreHttpApi.Requests
 
     public class UpdateScalingConfigurationRequestHandler : IRequestHandler<UpdateScalingConfigurationRequest, ScalingConfigurationResponse>
     {
-        private readonly ScalingDbContext dbContext;
+        private readonly IScalingDbContext dbContext;
 
-        public UpdateScalingConfigurationRequestHandler(ScalingDbContext dbContext)
+        public UpdateScalingConfigurationRequestHandler(IScalingDbContext dbContext)
         {
             this.dbContext = dbContext;
         }

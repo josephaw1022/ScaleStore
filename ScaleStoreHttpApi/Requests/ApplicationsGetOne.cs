@@ -26,9 +26,9 @@ public class ApplicationGetOneRequestResponse : IApplicationGetOneResponse
 
 public class ApplicationGetOneRequestHandler : IRequestHandler<ApplicationGetOneRequest, ApplicationGetOneRequestResponse>
 {
-    private readonly ScalingDbContext _context;
+    private readonly IScalingDbContext _context;
 
-    public ApplicationGetOneRequestHandler(ScalingDbContext context)
+    public ApplicationGetOneRequestHandler(IScalingDbContext context)
     {
         _context = context;
     }

@@ -31,9 +31,9 @@ public class UpdateApplicationResponse : IUpdateApplicationResponse
 
 public class UpdateApplicationRequestHandler : IRequestHandler<UpdateApplicationRequest, UpdateApplicationResponse>
 {
-    private readonly ScalingDbContext _context;
+    private readonly IScalingDbContext _context;
 
-    public UpdateApplicationRequestHandler(ScalingDbContext context)
+    public UpdateApplicationRequestHandler(IScalingDbContext context)
     {
         _context = context;
     }

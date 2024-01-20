@@ -31,9 +31,9 @@ public class CreateProjectRequest : IRequest<CreateProjectResponse> , ICreatePro
 
 public class CreateProjectRequestHandler : IRequestHandler<CreateProjectRequest, CreateProjectResponse>
 {
-    private readonly ScalingDbContext dbContext;
+    private readonly IScalingDbContext dbContext;
 
-    public CreateProjectRequestHandler(ScalingDbContext dbContext)
+    public CreateProjectRequestHandler(IScalingDbContext dbContext)
     {
         this.dbContext = dbContext;
     }

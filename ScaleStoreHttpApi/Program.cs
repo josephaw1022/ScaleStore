@@ -1,5 +1,4 @@
 using Asp.Versioning;
-using Microsoft.Extensions.Hosting;
 using ServiceScalingDb.ScalingDb;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,6 +25,8 @@ builder.Services.AddApiVersioning(
 
 
 builder.AddNpgsqlDbContext<ScalingDbContext>("scalestoredb");
+builder.Services.AddScoped<IScalingDbContext>(provider => provider.GetRequiredService<ScalingDbContext>());
+
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

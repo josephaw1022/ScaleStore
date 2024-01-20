@@ -141,12 +141,7 @@ public class ProjectsControllerTests
         var result = await _controller.PutProject(1, updateProject);
 
         // Assert
-
-        // should not have a issuccessful response. wont be not found because of the way the controller and handler is set up
-        // should have the is success property as false
-
-        
-
+        result.Should().BeOfType<NotFoundResult>();
     }
 
     [Test]

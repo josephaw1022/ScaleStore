@@ -2,7 +2,19 @@
 
 using Microsoft.EntityFrameworkCore;
 
-public class ScalingDbContext : DbContext
+
+
+public interface IScalingDbContext
+{
+    DbSet<Project> Projects { get; set; }
+    DbSet<Environment> Environments { get; set; }
+    DbSet<Application> Applications { get; set; }
+    DbSet<ScalingConfiguration> ScalingConfigurations { get; set; }
+
+    Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
+}
+
+public class ScalingDbContext : DbContext , IScalingDbContext
 {
     public DbSet<Project> Projects { get; set; }
     public DbSet<Environment> Environments { get; set; }

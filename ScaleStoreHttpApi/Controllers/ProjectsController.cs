@@ -26,7 +26,8 @@ namespace ScaleStoreHttpApi.Controllers
         [HttpGet]
         public async Task<ActionResult<List<ProjectsGetOneRequestResponse>>> GetProjects()
         {
-            return Ok(await _mediator.Send(new ProjectsTableViewRequest()));
+            var projects = await _mediator.Send(new ProjectsTableViewRequest());
+            return Ok(projects);
         }
 
 

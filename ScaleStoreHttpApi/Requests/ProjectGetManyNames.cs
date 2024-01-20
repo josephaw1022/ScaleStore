@@ -21,8 +21,8 @@ public class ProjectGetManyNamesResponseItem : IProjectGetManyNamesResponseItem
 public class ProjectGetManyNamesHandler : IRequestHandler<ProjectGetManyNamesRequest, List<ProjectGetManyNamesResponseItem>>
 {
     private readonly ILogger<ProjectGetManyNamesHandler> _logger;
-    private readonly ScalingDbContext _dbContext;
-    public ProjectGetManyNamesHandler(ILogger<ProjectGetManyNamesHandler> logger, ScalingDbContext scalingDbContext)
+    private readonly IScalingDbContext _dbContext;
+    public ProjectGetManyNamesHandler(ILogger<ProjectGetManyNamesHandler> logger, IScalingDbContext scalingDbContext)
     {
         _logger = logger;
         _dbContext = scalingDbContext;

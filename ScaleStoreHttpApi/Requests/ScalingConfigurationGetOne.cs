@@ -19,9 +19,9 @@ public class ScalingConfigurationResponse : IGetScalingConfigurationResponse
 
 public class GetScalingConfigurationRequestHandler : IRequestHandler<GetScalingConfigurationRequest, ScalingConfigurationResponse>
 {
-    private readonly ScalingDbContext dbContext;
+    private readonly IScalingDbContext dbContext;
 
-    public GetScalingConfigurationRequestHandler(ScalingDbContext dbContext)
+    public GetScalingConfigurationRequestHandler(IScalingDbContext dbContext)
     {
         this.dbContext = dbContext;
     }

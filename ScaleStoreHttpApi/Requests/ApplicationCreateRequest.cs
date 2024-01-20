@@ -29,11 +29,11 @@ public class CreateApplicationResponse : IApplicationCreateResponse
 
 public class CreateApplicationRequestHandler : IRequestHandler<CreateApplicationRequest, CreateApplicationResponse>
 {
-    private readonly ScalingDbContext _context;
+    private readonly IScalingDbContext _context;
     private readonly ILogger<CreateApplicationRequestHandler> _logger;
     private readonly IMediator _mediator;
 
-    public CreateApplicationRequestHandler(ScalingDbContext context, ILogger<CreateApplicationRequestHandler> logger, IMediator mediator)
+    public CreateApplicationRequestHandler(IScalingDbContext context, ILogger<CreateApplicationRequestHandler> logger, IMediator mediator)
     {
         _context = context;
         _logger = logger;

@@ -32,11 +32,11 @@ namespace ScaleStoreHttpApi.Requests
 
     public class UpdateProjectRequestHandler : IRequestHandler<UpdateProjectRequest, UpdateProjectResponse>
     {
-        private readonly ScalingDbContext dbContext;
+        private readonly IScalingDbContext dbContext;
 
         private readonly IDistributedCache cache;
 
-        public UpdateProjectRequestHandler(ScalingDbContext dbContext, IDistributedCache cache)
+        public UpdateProjectRequestHandler(IScalingDbContext dbContext, IDistributedCache cache)
         {
             this.dbContext = dbContext;
             this.cache = cache;

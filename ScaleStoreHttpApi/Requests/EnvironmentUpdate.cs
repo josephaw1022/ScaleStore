@@ -18,9 +18,9 @@ public class UpdateEnvironmentResponse : IUpdateEnvironmentResponse
 
 public class UpdateEnvironmentRequestHandler : IRequestHandler<UpdateEnvironmentRequest, UpdateEnvironmentResponse>
 {
-    private readonly ScalingDbContext dbContext;
+    private readonly IScalingDbContext dbContext;
 
-    public UpdateEnvironmentRequestHandler(ScalingDbContext dbContext)
+    public UpdateEnvironmentRequestHandler(IScalingDbContext dbContext)
     {
         this.dbContext = dbContext;
     }

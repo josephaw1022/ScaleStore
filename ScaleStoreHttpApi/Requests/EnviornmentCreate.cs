@@ -21,10 +21,10 @@ public class CreateEnvironmentResponse : ICreateEnvironmentResponse
 
 public class CreateEnvironmentRequestHandler : IRequestHandler<CreateEnvironmentRequest, CreateEnvironmentResponse>
 {
-    private readonly ScalingDbContext dbContext;
+    private readonly IScalingDbContext dbContext;
     private readonly IMediator mediator;
 
-    public CreateEnvironmentRequestHandler(ScalingDbContext dbContext, IMediator mediator)
+    public CreateEnvironmentRequestHandler(IScalingDbContext dbContext, IMediator mediator)
     {
         this.dbContext = dbContext;
         this.mediator = mediator;

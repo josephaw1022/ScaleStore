@@ -1,6 +1,6 @@
 ﻿namespace ScaleStoreHttpApi.Requests
 {
-    public class ProjectsDelete
-    {
-    }
+	public class ProjectsDelete
+	{
+	}
 }

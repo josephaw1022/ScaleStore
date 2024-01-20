@@ -1,87 +1,92 @@
-﻿using Bunit;
-using Bunit.TestDoubles;
-using NUnit.Framework;
-using NSubstitute;
-using Microsoft.Extensions.Logging;
-using ScaleStoreWebUI.Services;
-using ScaleStoreWebUI.Components.Pages;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Threading.Tasks;
+
+using Bunit;
+using Bunit.TestDoubles;
+
 using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Logging;
+
+using NSubstitute;
+
+using NUnit.Framework;
+
+using ScaleStoreWebUI.Components.Pages;
+using ScaleStoreWebUI.Services;
 
 namespace UnitTestsWebUI
 {
-    public class CreateProjectTests : BunitTestContext
-    {
+	public class CreateProjectTests : BunitTestContext
+	{
 
 
-        [SetUp]
-        public void Setup()
-        {
-            // Mock ScaleStoreApiService with its dependencies
-            var apiServiceMock = Substitute.For<ScaleStoreApiService>(Substitute.For<HttpClient>());
-            TestContext.Services.AddSingleton<ScaleStoreApiService>(apiServiceMock);
+		[SetUp]
+		public void Setup()
+		{
+			// Mock ScaleStoreApiService with its dependencies
+			var apiServiceMock = Substitute.For<ScaleStoreApiService>(Substitute.For<HttpClient>());
+			TestContext.Services.AddSingleton<ScaleStoreApiService>(apiServiceMock);
 
-            // Mock ILogger
-            var loggerMock = Substitute.For<ILogger<ProjectsCreate>>();
-            TestContext.Services.AddSingleton(loggerMock);
-        }
+			// Mock ILogger
+			var loggerMock = Substitute.For<ILogger<ProjectsCreate>>();
+			TestContext.Services.AddSingleton(loggerMock);
+		}
 
-        [Test]
-        public void FormSubmission_CallsCreateProjectServiceMethod()
-        {
-            var apiServiceMock = Substitute.For<ScaleStoreApiService>(Substitute.For<HttpClient>());
-            TestContext.Services.AddSingleton(apiServiceMock);
+		[Test]
+		public void FormSubmission_CallsCreateProjectServiceMethod()
+		{
+			var apiServiceMock = Substitute.For<ScaleStoreApiService>(Substitute.For<HttpClient>());
+			TestContext.Services.AddSingleton(apiServiceMock);
 
-            var fakeNavigation = TestContext.Services.GetService<FakeNavigationManager>();
+			var fakeNavigation = TestContext.Services.GetService<FakeNavigationManager>();
 
-            var cut = RenderComponent<ProjectsCreate>();
-            cut.Find("form").Submit();
+			var cut = RenderComponent<ProjectsCreate>();
+			cut.Find("form").Submit();
 
-            apiServiceMock.Received().CreateProject(Arg.Any<string>());
-        }
+			apiServiceMock.Received().CreateProject(Arg.Any<string>());
+		}
 
-        [Test]
-        public async Task SuccessfulFormSubmission_NavigatesToProjectsPage()
-        {
-            var apiServiceMock = Substitute.For<ScaleStoreApiService>(Substitute.For<HttpClient>());
-            
-            TestContext.Services.AddSingleton(apiServiceMock);
+		[Test]
+		public async Task SuccessfulFormSubmission_NavigatesToProjectsPage()
+		{
+			var apiServiceMock = Substitute.For<ScaleStoreApiService>(Substitute.For<HttpClient>());
 
-            var fakeNavigation = TestContext.Services.GetService<FakeNavigationManager>();
+			TestContext.Services.AddSingleton(apiServiceMock);
 
-            var cut = RenderComponent<ProjectsCreate>();
-            cut.Find("form").Submit();
+			var fakeNavigation = TestContext.Services.GetService<FakeNavigationManager>();
 
-            Assert.IsTrue(fakeNavigation.Uri.EndsWith("/projects"));
-        }
+			var cut = RenderComponent<ProjectsCreate>();
+			cut.Find("form").Submit();
 
-        [Test]
-        public void GoBackButton_Click_NavigatesToProjectsPage()
-        {
-            var navigationManagerMock = Services.GetRequiredService<FakeNavigationManager>();
+			Assert.IsTrue(fakeNavigation.Uri.EndsWith("/projects"));
+		}
 
-            var cut = RenderComponent<ProjectsCreate>();
-            cut.Find("#GoBack").Click();
+		[Test]
+		public void GoBackButton_Click_NavigatesToProjectsPage()
+		{
+			var navigationManagerMock = Services.GetRequiredService<FakeNavigationManager>();
 
-            Assert.IsTrue(navigationManagerMock.Uri.Contains("/projects"));
+			var cut = RenderComponent<ProjectsCreate>();
+			cut.Find("#GoBack").Click();
 
-        }
+			Assert.IsTrue(navigationManagerMock.Uri.Contains("/projects"));
 
-        [Test]
-        public void ComponentRenders_GoBackButton()
-        {
-            var cut = RenderComponent<ProjectsCreate>();
-            var goBackButton = cut.Find("#GoBack");
-            Assert.IsNotNull(goBackButton);
-        }
+		}
 
-        [Test]
-        public void ComponentRenders_CreateProjectHeader()
-        {
-            var cut = RenderComponent<ProjectsCreate>();
-            var header = cut.Find("h2");
-            Assert.IsTrue(header.TextContent.Contains("Create Project"));
-        }
-    }
+		[Test]
+		public void ComponentRenders_GoBackButton()
+		{
+			var cut = RenderComponent<ProjectsCreate>();
+			var goBackButton = cut.Find("#GoBack");
+			Assert.IsNotNull(goBackButton);
+		}
+
+		[Test]
+		public void ComponentRenders_CreateProjectHeader()
+		{
+			var cut = RenderComponent<ProjectsCreate>();
+			var header = cut.Find("h2");
+			Assert.IsTrue(header.TextContent.Contains("Create Project"));
+		}
+	}
 }

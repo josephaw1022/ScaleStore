@@ -3,13 +3,13 @@
 #nullable disable
 namespace ServiceScalingDb.Migrations
 {
-    /// <inheritdoc />
-    public partial class instancecountfunction : Migration
-    {
-        /// <inheritdoc />
-        protected override void Up(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.Sql(@"
+	/// <inheritdoc />
+	public partial class instancecountfunction : Migration
+	{
+		/// <inheritdoc />
+		protected override void Up(MigrationBuilder migrationBuilder)
+		{
+			migrationBuilder.Sql(@"
                 CREATE OR REPLACE FUNCTION get_number_of_instances(
                     applicationName VARCHAR,
                     projectName VARCHAR,
@@ -29,14 +29,14 @@ namespace ServiceScalingDb.Migrations
                 END;
                 $$ LANGUAGE plpgsql;
             ");
-        }
+		}
 
-        /// <inheritdoc />
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.Sql(@"
+		/// <inheritdoc />
+		protected override void Down(MigrationBuilder migrationBuilder)
+		{
+			migrationBuilder.Sql(@"
                 DROP FUNCTION IF EXISTS get_number_of_instances(VARCHAR, VARCHAR, VARCHAR);
             ");
-        }
-    }
+		}
+	}
 }

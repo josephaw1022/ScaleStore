@@ -1,5 +1,7 @@
 using Aspire.Hosting;
+
 using KEDAScalingUI.AppHost;
+
 using Microsoft.Extensions.Configuration;
 
 var builder = DistributedApplication.CreateBuilder(args);
@@ -38,7 +40,7 @@ var keycloakDbApp = builder.AddProject<Projects.ScaleStoreAuthenticationDb>("aut
     .WithReference(keycloakDb);
 
 var keycloak = builder.AddContainer("keycloak", "jboss/keycloak")
-    .WithServiceBinding(containerPort: 8080, hostPort:8080, name: "keycloak-http", scheme: "http")
+    .WithServiceBinding(containerPort: 8080, hostPort: 8080, name: "keycloak-http", scheme: "http")
     .WithReference(keycloakDb)
     .WithReference(keycloakDbApp);
 

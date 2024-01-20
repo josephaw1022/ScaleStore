@@ -1,94 +1,100 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using ServiceScalingDb.ScalingDb;
-using ServiceScalingDTO;
+﻿using Asp.Versioning;
+
 using MediatR;
-using ScaleStoreHttpApi.Requests;
-using ServiceScalingWebApi.Requests;
+
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
-using Asp.Versioning;
+
+using ScaleStoreHttpApi.Requests;
+
+using ServiceScalingDb.ScalingDb;
+
+using ServiceScalingDTO;
+
+using ServiceScalingWebApi.Requests;
 
 namespace ScaleStoreHttpApi.Controllers
 {
-    [ApiVersion(1.0)]
-    [ApiController]
-    [Route("api/v{version:apiVersion}/[controller]")]
-    [OutputCache(Duration = 5)]
-    public class ProjectsController : ControllerBase
-    {
+	[ApiVersion(1.0)]
+	[ApiController]
+	[Route("api/v{version:apiVersion}/[controller]")]
+	[OutputCache(Duration = 5)]
+	public class ProjectsController : ControllerBase
+	{
 
-        private readonly IMediator _mediator;
+		private readonly IMediator _mediator;
 
-        public ProjectsController(IMediator mediator)
-        {
-            _mediator = mediator;
-        }
+		public ProjectsController(IMediator mediator)
+		{
+			_mediator = mediator;
+		}
 
-        [HttpGet]
-        public async Task<ActionResult<List<ProjectsGetOneRequestResponse>>> GetProjects()
-        {
-            var projects = await _mediator.Send(new ProjectsTableViewRequest());
-            return Ok(projects);
-        }
-
-
-        [HttpGet]
-        [Route("names")]
-        public async Task <ActionResult<List<ProjectGetManyNamesResponseItem>>> GetProjectNames()
-        {
-            var result = await _mediator.Send(new ProjectGetManyNamesRequest());
-            return Ok(result);
-        }
-
-        [HttpGet("{id:int}")]
-        public async Task<ActionResult<ProjectsGetOneRequestResponse>> GetProject(int id)
-        {
-            var project = await _mediator.Send(new ProjectsGetOneRequest(id));
-
-            if (project is null)
-            {
-                return NotFound();
-            }
-
-            return Ok(project);
-        }
-
-        [HttpPut("{id:int}")]
-        public async Task<IActionResult> PutProject(int id, ProjectUpdateDTO project)
-        {
-            if (id != project.Id)
-            {
-                return BadRequest();
-            }
+		[HttpGet]
+		public async Task<ActionResult<List<ProjectsGetOneRequestResponse>>> GetProjects()
+		{
+			var projects = await _mediator.Send(new ProjectsTableViewRequest());
+			return Ok(projects);
+		}
 
 
-            var updateProject = await _mediator.Send(new UpdateProjectRequest(id, project.Name));
+		[HttpGet]
+		[Route("names")]
+		public async Task<ActionResult<List<ProjectGetManyNamesResponseItem>>> GetProjectNames()
+		{
+			var result = await _mediator.Send(new ProjectGetManyNamesRequest());
+			return Ok(result);
+		}
+
+		[HttpGet("{id:int}")]
+		public async Task<ActionResult<ProjectsGetOneRequestResponse>> GetProject(int id)
+		{
+			var project = await _mediator.Send(new ProjectsGetOneRequest(id));
+
+			if (project is null)
+			{
+				return NotFound();
+			}
+
+			return Ok(project);
+		}
+
+		[HttpPut("{id:int}")]
+		public async Task<IActionResult> PutProject(int id, ProjectUpdateDTO project)
+		{
+			if (id != project.Id)
+			{
+				return BadRequest();
+			}
 
 
-            if (!updateProject.IsSuccess)
-            {
-                return NotFound();
-            }
+			var updateProject = await _mediator.Send(new UpdateProjectRequest(id, project.Name));
 
 
-            return NoContent();
-        }
-
-        [HttpPost]
-        public async Task<ActionResult<Project>> PostProject(ProjectCreateDTO updateProject)
-        {
-
-            var project = await _mediator.Send(new CreateProjectRequest(updateProject.Name));
+			if (!updateProject.IsSuccess)
+			{
+				return NotFound();
+			}
 
 
-            return CreatedAtAction("GetProject", new { id = project.Id }, project);
+			return NoContent();
+		}
 
-        }
+		[HttpPost]
+		public async Task<ActionResult<Project>> PostProject(ProjectCreateDTO updateProject)
+		{
 
-        [HttpDelete("{id:int}")]
-        public async Task<IActionResult> DeleteProject(int id)
-        {
-            throw new NotImplementedException();
-        }
+			var project = await _mediator.Send(new CreateProjectRequest(updateProject.Name));
 
-    }
+
+			return CreatedAtAction("GetProject", new { id = project.Id }, project);
+
+		}
+
+		[HttpDelete("{id:int}")]
+		public async Task<IActionResult> DeleteProject(int id)
+		{
+			throw new NotImplementedException();
+		}
+
+	}
 }

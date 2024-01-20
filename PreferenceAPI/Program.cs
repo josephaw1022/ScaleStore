@@ -1,5 +1,7 @@
 using Asp.Versioning;
+
 using PreferenceAPI.Services;
+
 using PreferenceDb.Preference;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,17 +13,17 @@ builder.AddServiceDefaults();
 builder.AddNpgsqlDbContext<PreferenceDbContext>("preferencedb");
 
 builder.Services.AddApiVersioning(
-                    options =>
-                    {
-                        // Specify the default API Version as 1.0
-                        options.DefaultApiVersion = new ApiVersion(1, 0);
-                        // Reporting API versions will return the headers "api-supported-versions" and "api-deprecated-versions"
-                        options.ReportApiVersions = true;
-                        // Assume that the client is requesting the default version if they don't specify a version
-                        options.AssumeDefaultVersionWhenUnspecified = true;
-                        options.ReportApiVersions = true;
-                    })
-    .AddMvc();
+					options =>
+					{
+						// Specify the default API Version as 1.0
+						options.DefaultApiVersion = new ApiVersion(1, 0);
+						// Reporting API versions will return the headers "api-supported-versions" and "api-deprecated-versions"
+						options.ReportApiVersions = true;
+						// Assume that the client is requesting the default version if they don't specify a version
+						options.AssumeDefaultVersionWhenUnspecified = true;
+						options.ReportApiVersions = true;
+					})
+	.AddMvc();
 
 // Add Redis support
 builder.AddRedisOutputCache("preference-cache");
@@ -48,8 +50,8 @@ app.MapDefaultEndpoints();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+	app.UseSwagger();
+	app.UseSwaggerUI();
 }
 
 app.MapControllers();

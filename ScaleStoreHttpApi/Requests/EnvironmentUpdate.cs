@@ -1,41 +1,43 @@
 ﻿using MediatR;
+
 using ServiceScalingCore;
+
 using ServiceScalingDb.ScalingDb;
 
 namespace ScaleStoreHttpApi.Requests;
 
-public class UpdateEnvironmentRequest : IRequest<UpdateEnvironmentResponse> , IUpdateEnvironmentRequest
+public class UpdateEnvironmentRequest : IRequest<UpdateEnvironmentResponse>, IUpdateEnvironmentRequest
 {
-    public int EnvironmentID { get; set; }
-    public string EnvironmentName { get; set; } = null!;
-    public int ProjectID { get; set; }
+	public int EnvironmentID { get; set; }
+	public string EnvironmentName { get; set; } = null!;
+	public int ProjectID { get; set; }
 }
 
 public class UpdateEnvironmentResponse : IUpdateEnvironmentResponse
 {
-    public bool Success { get; set; }
+	public bool Success { get; set; }
 }
 
 public class UpdateEnvironmentRequestHandler : IRequestHandler<UpdateEnvironmentRequest, UpdateEnvironmentResponse>
 {
-    private readonly IScalingDbContext dbContext;
+	private readonly IScalingDbContext dbContext;
 
-    public UpdateEnvironmentRequestHandler(IScalingDbContext dbContext)
-    {
-        this.dbContext = dbContext;
-    }
+	public UpdateEnvironmentRequestHandler(IScalingDbContext dbContext)
+	{
+		this.dbContext = dbContext;
+	}
 
-    public async Task<UpdateEnvironmentResponse> Handle(UpdateEnvironmentRequest request, CancellationToken cancellationToken)
-    {
-        var environment = await dbContext.Environments.FindAsync(request.EnvironmentID);
+	public async Task<UpdateEnvironmentResponse> Handle(UpdateEnvironmentRequest request, CancellationToken cancellationToken)
+	{
+		var environment = await dbContext.Environments.FindAsync(request.EnvironmentID);
 
-        if (environment == null) return new UpdateEnvironmentResponse { Success = false };
+		if (environment == null) return new UpdateEnvironmentResponse { Success = false };
 
-        environment.EnvironmentName = request.EnvironmentName;
-        environment.ProjectID = request.ProjectID;
+		environment.EnvironmentName = request.EnvironmentName;
+		environment.ProjectID = request.ProjectID;
 
-        await dbContext.SaveChangesAsync(cancellationToken);
+		await dbContext.SaveChangesAsync(cancellationToken);
 
-        return new UpdateEnvironmentResponse { Success = true };
-    }
+		return new UpdateEnvironmentResponse { Success = true };
+	}
 }

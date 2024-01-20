@@ -16,7 +16,7 @@ builder.Services.AddHostedService(sp => sp.GetRequiredService<PreferenceDbInitia
 
 // Add health checks
 builder.Services.AddHealthChecks()
-    .AddCheck<PreferenceDbInitializerHealthCheck>("PreferenceDbInitializer");
+	.AddCheck<PreferenceDbInitializerHealthCheck>("PreferenceDbInitializer");
 
 var app = builder.Build();
 

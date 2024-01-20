@@ -4,20 +4,20 @@ using System.Text;
 
 namespace ServiceScalingCore
 {
-    public interface IGetManyScalingConfigurationsRequest
-    {
-        int ProjectID { get; set; }
+	public interface IGetManyScalingConfigurationsRequest
+	{
+		int ProjectID { get; set; }
 
-        int ApplicationId { get; set; }
-    }
+		int ApplicationId { get; set; }
+	}
 
 
-    public interface IScalingConfigurationTableViewResponse
-    {
-        public int Id { get; set; }
-        public string EnvironmentName { get; set; }
-        public string ApplicationName { get; set; }
-        public int NumberOfInstances { get; set; }
-    }
+	public interface IScalingConfigurationTableViewResponse
+	{
+		public int Id { get; set; }
+		public string EnvironmentName { get; set; }
+		public string ApplicationName { get; set; }
+		public int NumberOfInstances { get; set; }
+	}
 
 }

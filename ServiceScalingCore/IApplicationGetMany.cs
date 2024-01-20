@@ -5,16 +5,16 @@ using System.Text;
 namespace ServiceScalingCore
 {
 
-    public interface IApplicationsGetManyRequest
-    {
-        int ProjectId { get; }
-    }
+	public interface IApplicationsGetManyRequest
+	{
+		int ProjectId { get; }
+	}
 
-    public interface IApplicationsGetManyResponse
-    {
-        int Id { get; set; }
-        string Name { get; set; }
-        int ProjectId { get; set; }
-    }
+	public interface IApplicationsGetManyResponse
+	{
+		int Id { get; set; }
+		string Name { get; set; }
+		int ProjectId { get; set; }
+	}
 
 }

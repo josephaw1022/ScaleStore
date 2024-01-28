@@ -18,6 +18,9 @@ var keyCloakConfig = new KeycloakConfig();
 configuration.GetSection("Keycloak").Bind(keyCloakConfig);
 
 
+// Message Broker 
+var messageBroker = builder.AddRabbitMQ("rabbit-mq");
+
 ///Databases
 
 // Postgres Information
